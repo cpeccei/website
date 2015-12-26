@@ -225,7 +225,7 @@ grid()
 Here are the predictions from the model for price vs. carats; they
 closely match the observed data in the previous figure, which is good.
 
-![Modeled Price vs. Carats](price_carats_model.png)
+![Modeled Price vs. Carats](/static/diamonds/price_carats_model.png)
 
 ## Importing the Model into Mathematica
 
