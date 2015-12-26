@@ -50,7 +50,7 @@ basic steps:
 And here is the final product. Read on to see exactly how it was
 created.
 
-![Artist Map](static/artistmap/artistmap.png)
+![Artist Map](/static/artistmap/artistmap.png)
 
 The first step is to extract statistical features from the waveform
 of each MP3 file. I covered this step in depth in my earlier article
@@ -60,7 +60,7 @@ refer to that page for all the details.
 Next we use R to do the dimension reduction, aggregate the
 resulting points by artist, and plot the Voronoi diagram. Here's the R
 code; you can also download the
-file [songdata.csv](static/artistmap/songdata.csv) which contains artist,
+file [songdata.csv](/static/artistmap/songdata.csv) which contains artist,
 album, track name, and 42 statistical features for 753 songs by 31
 artists.
 
@@ -111,4 +111,4 @@ Graphic Designer.
 
 The final bitmap is shown above, but since everything in this
 visualization is made up of lines and polygons it also produces a nice
-resolution-independent PDF file (available [here](static/artistmap/artistmap.pdf)).
+resolution-independent PDF file (available [here](/static/artistmap/artistmap.pdf)).
