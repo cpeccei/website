@@ -43,3 +43,4 @@ MD_EXTENSIONS = {'markdown.extensions.tables': {},
 
 LOAD_CONTENT_CACHE = False
 STATIC_PATHS = ['static']
+THEME = 'themes/test'
