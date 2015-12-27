@@ -2,8 +2,6 @@ Title: Pricing a Diamond
 Date: 2015-12-25
 Slug: diamonds
 
-# Pricing a Diamond
-
 I recently got engaged to wonderful girl, and as any guy who has gone
 through this process knows, choosing the right ring can be a tricky
 decision! Fortunately I had a pretty good idea of my fiance's tastes: a

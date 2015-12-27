@@ -2,8 +2,6 @@ Title: Visualizing the Similarity of Musical Artists
 Date: 2015-12-25
 Slug: artistmap
 
-# Visualizing the Similarity of Musical Artists
-
 A while back I created a [visual map](/musicmap/) of my music collection by
 calculating the statistical similarity between the audio waveforms of each
 track. The algorithm worked quite well but I wasn't fully satisfied with the

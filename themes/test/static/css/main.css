@@ -1,14 +1,39 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #47c;
+}
+a:hover, a:focus {
+    text-decoration: underline;
+}
+
 body {
-  font-family: sans-serif;
-  line-height: 160%;
+    font-family: sans-serif;
+    line-height: 160%;
 }
 
 h1 {
-  color: #47c;
+   color: #47c;
 }
 
 .sidebar {
-    background-color: #aaa;
+    background-color: #eee;
+    foreground-color: #fff;
+    padding: 20px;
+}
+
+#banner {
+    border-bottom: 1px solid lightgray;
+    padding: 5px;
+}
+
+.content {
+    padding: 30px;
 }
 
 pre {
