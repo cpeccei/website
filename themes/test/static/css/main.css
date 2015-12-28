@@ -17,6 +17,14 @@ body {
     line-height: 160%;
 }
 
+html, body {
+    height: 100%;
+}
+
+.main {
+    min-height: 100%;
+}
+
 h1 {
    color: #47c;
 }
@@ -27,13 +35,14 @@ h1 {
     padding: 20px;
 }
 
-#banner {
-    border-bottom: 1px solid lightgray;
-    padding: 5px;
+.sidebar ul {
+    list-style-type: none;
+    padding-left: 0px;
 }
 
+
 .content {
-    padding: 30px;
+     padding: 30px;
 }
 
 pre {
