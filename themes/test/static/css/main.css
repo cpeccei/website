@@ -36,8 +36,8 @@ h1 {
 }
 
 .sidebar ul {
-    list-style-type: none;
-    padding-left: 0px;
+    list-style-type: square;
+    padding-left: 20px;
 }
 
 
@@ -51,6 +51,7 @@ pre {
   background-color: #f8f8f8;
   padding-left: 5px;
   padding-right: 5px;
+  font-size: 90%;
 }
 
 :not(pre) > code {
@@ -59,6 +60,7 @@ pre {
   background-color: #f8f8f8;
   padding-left: 3px;
   padding-right: 3px;
+  font-size: 90%;
 }
 
 table {
