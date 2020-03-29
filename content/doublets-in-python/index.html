@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Solving Doublets in Python</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #c4a000; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #000000; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #000000; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #000000; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="/base.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Solving Doublets in Python</h1>
+</header>
+<p><a href="/">← Back to main page</a></p>
+<p>July 11, 2015</p>
+<p>This is a follow-up to an article I wrote a few years ago on <a href="/doublets/">Solving Doublets in Mathematica</a>.</p>
+<p>Doublets are a type of word puzzle invented by Lewis Carroll (author of “Alice in Wonderland”). The goal is to change one word into another by adding, removing, or changing one letter at a time. The tricky part is that each intermediate step must also be a valid word. For more information see this Wikipedia article on <a href="https://en.wikipedia.org/wiki/Word_ladder">word ladders</a>. Here’s an example from that page:</p>
+<p>COLD → CO<strong>R</strong>D → C<strong>A</strong>RD → <strong>W</strong>ARD → WAR<strong>M</strong></p>
+<p>If we think of words as vertices in a graph then two words are connected by an edge if they differ by exactly one character. Once we have a graph of connected words we can use a shortest path algorithm to solve for doublets. We’ll solve this in Python 2.7 using the <a href="https://networkx.github.io/">NetworkX</a> graph library. I highly recommend using the <a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a> Python distribution which includes NetworkX and many other useful packages for data science.</p>
+<p>First let’s import the packages we’ll need and define a function <code>differ_by_one</code> that returns True if two words differ by exactly one character and False otherwise. Note that we could simply check that the <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a> between the two words equals 1 but that algorithm is overkill for what we need here and runs much more slowly than the custom function below.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> re</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> itertools</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> urllib2</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> networkx</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">def</span> differ_by_one(word1, word2):</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="co"># Make sure word1 is shorter or equal in length to word2</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="cf">if</span> <span class="bu">len</span>(word2) <span class="op">&lt;</span> <span class="bu">len</span>(word1):</span>
+<span id="cb1-9"><a href="#cb1-9"></a>        word1, word2 <span class="op">=</span> word2, word1</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="cf">if</span> <span class="bu">len</span>(word2) <span class="op">-</span> <span class="bu">len</span>(word1) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb1-11"><a href="#cb1-11"></a>        <span class="co"># Words differ in length by 2 or more characters so return False</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="cf">elif</span> <span class="bu">len</span>(word1) <span class="op">==</span> <span class="bu">len</span>(word2):</span>
+<span id="cb1-14"><a href="#cb1-14"></a>        <span class="co"># Words are same length so check how many characters are different</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="co"># and return True if exactly one</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a>        n_chars_diff <span class="op">=</span> <span class="bu">sum</span>(c1 <span class="op">!=</span> c2 <span class="cf">for</span> c1, c2 <span class="kw">in</span> <span class="bu">zip</span>(word1, word2))</span>
+<span id="cb1-17"><a href="#cb1-17"></a>        <span class="cf">return</span> n_chars_diff <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-19"><a href="#cb1-19"></a>        <span class="co"># word2 is guaranteed to be one character longer than word1.</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>        <span class="co"># Chop out one character at a time from word2 and compare to word1.</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(word2)):</span>
+<span id="cb1-22"><a href="#cb1-22"></a>            word2_shortened <span class="op">=</span> word2[:i] <span class="op">+</span> word2[i <span class="op">+</span> <span class="dv">1</span>:]</span>
+<span id="cb1-23"><a href="#cb1-23"></a>            <span class="cf">if</span> word1 <span class="op">==</span> word2_shortened:</span>
+<span id="cb1-24"><a href="#cb1-24"></a>                <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a>        <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
+<p>Now let’s get a list of 5-letter words and compute which ones are connected to each other. If two words are connected we’ll add them to our graph.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Compile list of all lowercase words with up to 5 letters.</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>response <span class="op">=</span> urllib2.urlopen(</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="st">&#39;http://s3-us-west-1.amazonaws.com/cpeccei-public/words.txt&#39;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> response.read().splitlines()</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">if</span> re.search(<span class="st">&#39;^[a-z]{,5}$&#39;</span>, word)]</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a>g <span class="op">=</span> networkx.Graph()</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="cf">for</span> word1, word2 <span class="kw">in</span> itertools.combinations(words, <span class="dv">2</span>):</span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="cf">if</span> differ_by_one(word1, word2):</span>
+<span id="cb2-10"><a href="#cb2-10"></a>        g.add_edge(word1, word2)</span></code></pre></div>
+<p>Now if we want to solve a doublet between two words we just do:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>networkx.shortest_path(g, <span class="st">&#39;hello&#39;</span>, <span class="st">&#39;world&#39;</span>)</span></code></pre></div>
+<p>Which in this case returns:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>[<span class="st">&#39;hello&#39;</span>, <span class="st">&#39;hell&#39;</span>, <span class="st">&#39;held&#39;</span>, <span class="st">&#39;hold&#39;</span>, <span class="st">&#39;cold&#39;</span>, <span class="st">&#39;cord&#39;</span>, <span class="st">&#39;word&#39;</span>, <span class="st">&#39;world&#39;</span>]</span></code></pre></div>
+<p>NetworkX makes this so nice and simple. For fun we can compute some doublets that turn words into their opposites (i.e. antonyms).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># From http://www.michigan-proficiency-exams.com/antonym-list.html</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>response <span class="op">=</span> urllib2.urlopen(</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="st">&#39;http://s3-us-west-1.amazonaws.com/cpeccei-public/antonyms.txt&#39;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>antonyms <span class="op">=</span> [line.split() <span class="cf">for</span> line <span class="kw">in</span> response.read().splitlines()]</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>antonym_paths <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="cf">for</span> word1, word2 <span class="kw">in</span> antonyms:</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    <span class="cf">if</span> word1 <span class="kw">in</span> g <span class="kw">and</span> word2 <span class="kw">in</span> g:</span>
+<span id="cb5-9"><a href="#cb5-9"></a>        <span class="cf">try</span>:</span>
+<span id="cb5-10"><a href="#cb5-10"></a>            path <span class="op">=</span> networkx.shortest_path(g, word1, word2)</span>
+<span id="cb5-11"><a href="#cb5-11"></a>            antonym_paths.add(<span class="bu">tuple</span>(path))</span>
+<span id="cb5-12"><a href="#cb5-12"></a>        <span class="cf">except</span> networkx.exception.NetworkXNoPath:</span>
+<span id="cb5-13"><a href="#cb5-13"></a>            <span class="cf">pass</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;antonym_paths.html&#39;</span>, <span class="st">&#39;w&#39;</span>) <span class="im">as</span> f:</span>
+<span id="cb5-16"><a href="#cb5-16"></a>    <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">sorted</span>(antonym_paths, key<span class="op">=</span><span class="bu">len</span>, reverse<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb5-17"><a href="#cb5-17"></a>        f.write(<span class="st">&#39;&lt;p&gt;&lt;b&gt;</span><span class="sc">{}</span><span class="st">&lt;/b&gt; to &lt;b&gt;</span><span class="sc">{}</span><span class="st">&lt;/b&gt;&lt;br /&gt;</span><span class="sc">{}</span><span class="st">&lt;/p&gt;</span><span class="ch">\n</span><span class="st">&#39;</span>.<span class="bu">format</span>(p[<span class="dv">0</span>], p[<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb5-18"><a href="#cb5-18"></a>            <span class="st">&#39; &amp;rarr; &#39;</span>.join(p)))</span></code></pre></div>
+<p>Which returns:</p>
+<p>
+<b>heavy</b> to <b>light</b><br />heavy → heady → beady → bead → beat → begat → begot → bigot → bight → light
+</p>
+<p>
+<b>noisy</b> to <b>quiet</b><br />noisy → nosy → nose → note → nite → site → suite → quite → quit → quiet
+</p>
+<p>
+<b>right</b> to <b>wrong</b><br />right → sight → sighs → signs → sins → sing → ring → wring → wrong
+</p>
+<p>
+<b>night</b> to <b>day</b><br />night → nigh → sigh → sign → sin → pin → pan → pay → day
+</p>
+<p>
+<b>tight</b> to <b>slack</b><br />tight → sight → sighs → signs → sins → sics → sacs → sack → slack
+</p>
+<p>
+<b>clear</b> to <b>vague</b><br />clear → clean → clan → can → cane → cage → age → ague → vague
+</p>
+<p>
+<b>dark</b> to <b>light</b><br />dark → dank → sank → sink → sins → signs → sighs → sight → light
+</p>
+<p>
+<b>light</b> to <b>dark</b><br />light → sight → sighs → signs → sins → sink → sank → dank → dark
+</p>
+<p>
+<b>fresh</b> to <b>stale</b><br />fresh → flesh → flash → flask → flak → flake → slake → stake → stale
+</p>
+<p>
+<b>below</b> to <b>above</b><br />below → blow → bow → boy → body → bode → abode → above
+</p>
+<p>
+<b>glad</b> to <b>sorry</b><br />glad → goad → good → wood → woody → wordy → worry → sorry
+</p>
+<p>
+<b>sober</b> to <b>drunk</b><br />sober → saber → saner → sane → sank → sunk → dunk → drunk
+</p>
+<p>
+<b>left</b> to <b>right</b><br />left → lest → best → besot → begot → bigot → bight → right
+</p>
+<p>
+<b>best</b> to <b>worst</b><br />best → lest → lost → host → hose → horse → worse → worst
+</p>
+<p>
+<b>blunt</b> to <b>sharp</b><br />blunt → bunt → hunt → hurt → hart → harp → sharp
+</p>
+<p>
+<b>bless</b> to <b>curse</b><br />bless → less → mess → muss → cuss → curs → curse
+</p>
+<p>
+<b>big</b> to <b>small</b><br />big → bid → mid → mil → mail → mall → small
+</p>
+<p>
+<b>alive</b> to <b>dead</b><br />alive → live → lie → lid → did → dad → dead
+</p>
+<p>
+<b>dull</b> to <b>clear</b><br />dull → dell → deal → dean → lean → clean → clear
+</p>
+<p>
+<b>tall</b> to <b>short</b><br />tall → tale → tare → hare → share → shore → short
+</p>
+<p>
+<b>rapid</b> to <b>slow</b><br />rapid → raid → said → slid → slit → slot → slow
+</p>
+<p>
+<b>low</b> to <b>high</b><br />low → sow → son → sin → sign → sigh → high
+</p>
+<p>
+<b>rich</b> to <b>poor</b><br />rich → rick → rock → rook → book → boor → poor
+</p>
+<p>
+<b>cruel</b> to <b>kind</b><br />cruel → creel → creed → reed → rend → rind → kind
+</p>
+<p>
+<b>dusk</b> to <b>dawn</b><br />dusk → dunk → dun → don → down → dawn
+</p>
+<p>
+<b>bold</b> to <b>timid</b><br />bold → told → toed → tied → timed → timid
+</p>
+<p>
+<b>stand</b> to <b>lie</b><br />stand → staid → said → slid → lid → lie
+</p>
+<p>
+<b>early</b> to <b>late</b><br />early → earl → ears → eats → lats → late
+</p>
+<p>
+<b>loss</b> to <b>find</b><br />loss → less → lens → lend → fend → find
+</p>
+<p>
+<b>long</b> to <b>short</b><br />long → lone → lore → sore → sort → short
+</p>
+<p>
+<b>up</b> to <b>down</b><br />up → uh → oh → on → own → down
+</p>
+<p>
+<b>fast</b> to <b>slow</b><br />fast → fat → flat → slat → slot → slow
+</p>
+<p>
+<b>new</b> to <b>old</b><br />new → now → nod → god → gold → old
+</p>
+<p>
+<b>found</b> to <b>lost</b><br />found → fount → font → foot → loot → lost
+</p>
+<p>
+<b>slim</b> to <b>thick</b><br />slim → shim → shin → thin → think → thick
+</p>
+<p>
+<b>open</b> to <b>shut</b><br />open → pen → pun → spun → shun → shut
+</p>
+<p>
+<b>happy</b> to <b>sad</b><br />happy → harpy → hardy → hard → had → sad
+</p>
+<p>
+<b>sour</b> to <b>sweet</b><br />sour → soar → sear → swear → sweat → sweet
+</p>
+<p>
+<b>odd</b> to <b>even</b><br />odd → ode → owe → ewe → eve → even
+</p>
+<p>
+<b>dry</b> to <b>wet</b><br />dry → cry → coy → cot → wot → wet
+</p>
+<p>
+<b>hard</b> to <b>soft</b><br />hard → hart → tart → tort → sort → soft
+</p>
+<p>
+<b>tame</b> to <b>wild</b><br />tame → time → tile → wile → wild
+</p>
+<p>
+<b>sow</b> to <b>reap</b><br />sow → sop → sap → rap → reap
+</p>
+<p>
+<b>out</b> to <b>in</b><br />out → but → bun → bin → in
+</p>
+<p>
+<b>few</b> to <b>many</b><br />few → fen → men → man → many
+</p>
+<p>
+<b>find</b> to <b>lose</b><br />find → fine → line → lone → lose
+</p>
+<p>
+<b>land</b> to <b>sea</b><br />land → lad → lead → lea → sea
+</p>
+<p>
+<b>peace</b> to <b>war</b><br />peace → pace → pare → par → war
+</p>
+<p>
+<b>fat</b> to <b>thin</b><br />fat → tat → tan → tin → thin
+</p>
+<p>
+<b>less</b> to <b>more</b><br />less → loss → lose → lore → more
+</p>
+<p>
+<b>guest</b> to <b>host</b><br />guest → gust → lust → lost → host
+</p>
+<p>
+<b>take</b> to <b>give</b><br />take → hake → hike → hive → give
+</p>
+<p>
+<b>come</b> to <b>go</b><br />come → code → cod → god → go
+</p>
+<p>
+<b>loud</b> to <b>soft</b><br />loud → lout → loft → soft
+</p>
+<p>
+<b>hate</b> to <b>love</b><br />hate → have → hove → love
+</p>
+<p>
+<b>mad</b> to <b>sane</b><br />mad → sad → sand → sane
+</p>
+<p>
+<b>last</b> to <b>first</b><br />last → list → fist → first
+</p>
+<p>
+<b>bad</b> to <b>good</b><br />bad → gad → god → good
+</p>
+<p>
+<b>cold</b> to <b>hot</b><br />cold → colt → cot → hot
+</p>
+<p>
+<b>cheap</b> to <b>dear</b><br />cheap → heap → hear → dear
+</p>
+<p>
+<b>first</b> to <b>last</b><br />first → fist → list → last
+</p>
+<p>
+<b>me</b> to <b>you</b><br />me → ye → yo → you
+</p>
+<p>
+<b>near</b> to <b>far</b><br />near → fear → far
+</p>
+<p>
+<b>thick</b> to <b>thin</b><br />thick → think → thin
+</p>
+<p>
+<b>wax</b> to <b>wane</b><br />wax → wan → wane
+</p>
+<p>
+<b>here</b> to <b>there</b><br />here → there
+</p>
+</body>
+</html>
