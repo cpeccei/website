@@ -73,6 +73,7 @@
     code span.va { color: #000000; } /* Variable */
     code span.vs { color: #4e9a06; } /* VerbatimString */
     code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="/base.css" />
   <!--[if lt IE 9]>
@@ -90,65 +91,65 @@
 <p>COLD → CO<strong>R</strong>D → C<strong>A</strong>RD → <strong>W</strong>ARD → WAR<strong>M</strong></p>
 <p>If we think of words as vertices in a graph then two words are connected by an edge if they differ by exactly one character. Once we have a graph of connected words we can use a shortest path algorithm to solve for doublets. We’ll solve this in Python 2.7 using the <a href="https://networkx.github.io/">NetworkX</a> graph library. I highly recommend using the <a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a> Python distribution which includes NetworkX and many other useful packages for data science.</p>
 <p>First let’s import the packages we’ll need and define a function <code>differ_by_one</code> that returns True if two words differ by exactly one character and False otherwise. Note that we could simply check that the <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a> between the two words equals 1 but that algorithm is overkill for what we need here and runs much more slowly than the custom function below.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> re</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> itertools</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> urllib2</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> networkx</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">def</span> differ_by_one(word1, word2):</span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="co"># Make sure word1 is shorter or equal in length to word2</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>    <span class="cf">if</span> <span class="bu">len</span>(word2) <span class="op">&lt;</span> <span class="bu">len</span>(word1):</span>
-<span id="cb1-9"><a href="#cb1-9"></a>        word1, word2 <span class="op">=</span> word2, word1</span>
-<span id="cb1-10"><a href="#cb1-10"></a>    <span class="cf">if</span> <span class="bu">len</span>(word2) <span class="op">-</span> <span class="bu">len</span>(word1) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb1-11"><a href="#cb1-11"></a>        <span class="co"># Words differ in length by 2 or more characters so return False</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a>        <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a>    <span class="cf">elif</span> <span class="bu">len</span>(word1) <span class="op">==</span> <span class="bu">len</span>(word2):</span>
-<span id="cb1-14"><a href="#cb1-14"></a>        <span class="co"># Words are same length so check how many characters are different</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a>        <span class="co"># and return True if exactly one</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a>        n_chars_diff <span class="op">=</span> <span class="bu">sum</span>(c1 <span class="op">!=</span> c2 <span class="cf">for</span> c1, c2 <span class="kw">in</span> <span class="bu">zip</span>(word1, word2))</span>
-<span id="cb1-17"><a href="#cb1-17"></a>        <span class="cf">return</span> n_chars_diff <span class="op">==</span> <span class="dv">1</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a>    <span class="cf">else</span>:</span>
-<span id="cb1-19"><a href="#cb1-19"></a>        <span class="co"># word2 is guaranteed to be one character longer than word1.</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a>        <span class="co"># Chop out one character at a time from word2 and compare to word1.</span></span>
-<span id="cb1-21"><a href="#cb1-21"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(word2)):</span>
-<span id="cb1-22"><a href="#cb1-22"></a>            word2_shortened <span class="op">=</span> word2[:i] <span class="op">+</span> word2[i <span class="op">+</span> <span class="dv">1</span>:]</span>
-<span id="cb1-23"><a href="#cb1-23"></a>            <span class="cf">if</span> word1 <span class="op">==</span> word2_shortened:</span>
-<span id="cb1-24"><a href="#cb1-24"></a>                <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a>        <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">import</span> re</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="im">import</span> itertools</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="im">import</span> urllib2</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="im">import</span> networkx</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">def</span> differ_by_one(word1, word2):</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="co"># Make sure word1 is shorter or equal in length to word2</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">if</span> <span class="bu">len</span>(word2) <span class="op">&lt;</span> <span class="bu">len</span>(word1):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        word1, word2 <span class="op">=</span> word2, word1</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="cf">if</span> <span class="bu">len</span>(word2) <span class="op">-</span> <span class="bu">len</span>(word1) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="co"># Words differ in length by 2 or more characters so return False</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    <span class="cf">elif</span> <span class="bu">len</span>(word1) <span class="op">==</span> <span class="bu">len</span>(word2):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>        <span class="co"># Words are same length so check how many characters are different</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>        <span class="co"># and return True if exactly one</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>        n_chars_diff <span class="op">=</span> <span class="bu">sum</span>(c1 <span class="op">!=</span> c2 <span class="cf">for</span> c1, c2 <span class="kw">in</span> <span class="bu">zip</span>(word1, word2))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>        <span class="cf">return</span> n_chars_diff <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>        <span class="co"># word2 is guaranteed to be one character longer than word1.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>        <span class="co"># Chop out one character at a time from word2 and compare to word1.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(word2)):</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>            word2_shortened <span class="op">=</span> word2[:i] <span class="op">+</span> word2[i <span class="op">+</span> <span class="dv">1</span>:]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>            <span class="cf">if</span> word1 <span class="op">==</span> word2_shortened:</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>                <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>        <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
 <p>Now let’s get a list of 5-letter words and compute which ones are connected to each other. If two words are connected we’ll add them to our graph.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Compile list of all lowercase words with up to 5 letters.</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>response <span class="op">=</span> urllib2.urlopen(</span>
-<span id="cb2-3"><a href="#cb2-3"></a>    <span class="st">&#39;http://s3-us-west-1.amazonaws.com/cpeccei-public/words.txt&#39;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a>words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> response.read().splitlines()</span>
-<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">if</span> re.search(<span class="st">&#39;^[a-z]{,5}$&#39;</span>, word)]</span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a>g <span class="op">=</span> networkx.Graph()</span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="cf">for</span> word1, word2 <span class="kw">in</span> itertools.combinations(words, <span class="dv">2</span>):</span>
-<span id="cb2-9"><a href="#cb2-9"></a>    <span class="cf">if</span> differ_by_one(word1, word2):</span>
-<span id="cb2-10"><a href="#cb2-10"></a>        g.add_edge(word1, word2)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># Compile list of all lowercase words with up to 5 letters.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>response <span class="op">=</span> urllib2.urlopen(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="st">&#39;http://s3-us-west-1.amazonaws.com/cpeccei-public/words.txt&#39;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> response.read().splitlines()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="cf">if</span> re.search(<span class="st">&#39;^[a-z]{,5}$&#39;</span>, word)]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>g <span class="op">=</span> networkx.Graph()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="cf">for</span> word1, word2 <span class="kw">in</span> itertools.combinations(words, <span class="dv">2</span>):</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>    <span class="cf">if</span> differ_by_one(word1, word2):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>        g.add_edge(word1, word2)</span></code></pre></div>
 <p>Now if we want to solve a doublet between two words we just do:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>networkx.shortest_path(g, <span class="st">&#39;hello&#39;</span>, <span class="st">&#39;world&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>networkx.shortest_path(g, <span class="st">&#39;hello&#39;</span>, <span class="st">&#39;world&#39;</span>)</span></code></pre></div>
 <p>Which in this case returns:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>[<span class="st">&#39;hello&#39;</span>, <span class="st">&#39;hell&#39;</span>, <span class="st">&#39;held&#39;</span>, <span class="st">&#39;hold&#39;</span>, <span class="st">&#39;cold&#39;</span>, <span class="st">&#39;cord&#39;</span>, <span class="st">&#39;word&#39;</span>, <span class="st">&#39;world&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>[<span class="st">&#39;hello&#39;</span>, <span class="st">&#39;hell&#39;</span>, <span class="st">&#39;held&#39;</span>, <span class="st">&#39;hold&#39;</span>, <span class="st">&#39;cold&#39;</span>, <span class="st">&#39;cord&#39;</span>, <span class="st">&#39;word&#39;</span>, <span class="st">&#39;world&#39;</span>]</span></code></pre></div>
 <p>NetworkX makes this so nice and simple. For fun we can compute some doublets that turn words into their opposites (i.e. antonyms).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># From http://www.michigan-proficiency-exams.com/antonym-list.html</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>response <span class="op">=</span> urllib2.urlopen(</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="st">&#39;http://s3-us-west-1.amazonaws.com/cpeccei-public/antonyms.txt&#39;</span>)</span>
-<span id="cb5-4"><a href="#cb5-4"></a>antonyms <span class="op">=</span> [line.split() <span class="cf">for</span> line <span class="kw">in</span> response.read().splitlines()]</span>
-<span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a>antonym_paths <span class="op">=</span> <span class="bu">set</span>()</span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="cf">for</span> word1, word2 <span class="kw">in</span> antonyms:</span>
-<span id="cb5-8"><a href="#cb5-8"></a>    <span class="cf">if</span> word1 <span class="kw">in</span> g <span class="kw">and</span> word2 <span class="kw">in</span> g:</span>
-<span id="cb5-9"><a href="#cb5-9"></a>        <span class="cf">try</span>:</span>
-<span id="cb5-10"><a href="#cb5-10"></a>            path <span class="op">=</span> networkx.shortest_path(g, word1, word2)</span>
-<span id="cb5-11"><a href="#cb5-11"></a>            antonym_paths.add(<span class="bu">tuple</span>(path))</span>
-<span id="cb5-12"><a href="#cb5-12"></a>        <span class="cf">except</span> networkx.exception.NetworkXNoPath:</span>
-<span id="cb5-13"><a href="#cb5-13"></a>            <span class="cf">pass</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;antonym_paths.html&#39;</span>, <span class="st">&#39;w&#39;</span>) <span class="im">as</span> f:</span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">sorted</span>(antonym_paths, key<span class="op">=</span><span class="bu">len</span>, reverse<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb5-17"><a href="#cb5-17"></a>        f.write(<span class="st">&#39;&lt;p&gt;&lt;b&gt;</span><span class="sc">{}</span><span class="st">&lt;/b&gt; to &lt;b&gt;</span><span class="sc">{}</span><span class="st">&lt;/b&gt;&lt;br /&gt;</span><span class="sc">{}</span><span class="st">&lt;/p&gt;</span><span class="ch">\n</span><span class="st">&#39;</span>.<span class="bu">format</span>(p[<span class="dv">0</span>], p[<span class="op">-</span><span class="dv">1</span>],</span>
-<span id="cb5-18"><a href="#cb5-18"></a>            <span class="st">&#39; &amp;rarr; &#39;</span>.join(p)))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co"># From http://www.michigan-proficiency-exams.com/antonym-list.html</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>response <span class="op">=</span> urllib2.urlopen(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    <span class="st">&#39;http://s3-us-west-1.amazonaws.com/cpeccei-public/antonyms.txt&#39;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>antonyms <span class="op">=</span> [line.split() <span class="cf">for</span> line <span class="kw">in</span> response.read().splitlines()]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>antonym_paths <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="cf">for</span> word1, word2 <span class="kw">in</span> antonyms:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>    <span class="cf">if</span> word1 <span class="kw">in</span> g <span class="kw">and</span> word2 <span class="kw">in</span> g:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>        <span class="cf">try</span>:</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>            path <span class="op">=</span> networkx.shortest_path(g, word1, word2)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>            antonym_paths.add(<span class="bu">tuple</span>(path))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>        <span class="cf">except</span> networkx.exception.NetworkXNoPath:</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>            <span class="cf">pass</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;antonym_paths.html&#39;</span>, <span class="st">&#39;w&#39;</span>) <span class="im">as</span> f:</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a>    <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">sorted</span>(antonym_paths, key<span class="op">=</span><span class="bu">len</span>, reverse<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a>        f.write(<span class="st">&#39;&lt;p&gt;&lt;b&gt;</span><span class="sc">{}</span><span class="st">&lt;/b&gt; to &lt;b&gt;</span><span class="sc">{}</span><span class="st">&lt;/b&gt;&lt;br /&gt;</span><span class="sc">{}</span><span class="st">&lt;/p&gt;</span><span class="ch">\n</span><span class="st">&#39;</span>.<span class="bu">format</span>(p[<span class="dv">0</span>], p[<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a>            <span class="st">&#39; &amp;rarr; &#39;</span>.join(p)))</span></code></pre></div>
 <p>Which returns:</p>
 <p>
 <b>heavy</b> to <b>light</b><br />heavy → heady → beady → bead → beat → begat → begot → bigot → bight → light
