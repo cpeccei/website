@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A Statistical Analysis of the Sherlock Holmes Stories</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #c4a000; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #000000; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #000000; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #000000; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/base.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">A Statistical Analysis of the Sherlock Holmes Stories</h1>
+</header>
+<p><a href="/">← Back to main page</a></p>
+<p><img src="holmes.jpg" alt="Holmes and Watson" style="margin-right:15px; float:left"> Sir Arthur Conan Doyle’s Sherlock Holmes stories represent some of the finest detective literature ever written. In total Doyle wrote four Holmes novels and 56 short stories, a body of work enthusiasts affectionately refer to as “The Canon”. As might be expected with such a large corpus of text written over a period of forty years, there is a significant variation in quality between the Holmes stories. In general, Doyle’s earlier collections of stories (“The Adventures of Sherlock Holmes”, “The Memoirs of Sherlock Holmes”, “The Return of Sherlock Holmes”) are considered superior to his later ones (“The Casebook of Sherlock Holmes”, “His Last Bow”).</p>
+<p>What makes a good Sherlock Holmes story? The quality of a piece of literature is difficult to measure objectively, and depends as much on personal preference as it does on writing style, plot development, characters, pacing and so on. Randall Stock’s article <a href="http://www.bestofsherlock.com/story/storyhm.htm">“Rating Sherlock Holmes”</a> (The Baker Street Journal, December 1999, pp. 5-11) polled Sherlockian experts from around the world to come up with a comprehensive ranking of all 56 short stories.</p>
+<p>I thought it would be interesting to explore how the quality of a story relates to statistical properties of the text itself. Does lots of dialog generally make for a good story? What about the length of the story, or the average number of words per sentence? Since the text of these works is now in the public domain (with some restrictions depending on the country you are in) it is possible to text mine the data, extract statistics from the text, and build a regression that relates them to the overall quality of the story.</p>
+<p>For simplicity, I turned the ranking of the 56 stories into ratings on a five point scale: one star being worst, five stars being best.</p>
+<table>
+<tr>
+<th>
+Rating
+</th>
+<th>
+Stories
+</th>
+</tr>
+<tr>
+<td>
+★★★★★
+</td>
+<td style="padding: 10px;">
+A Scandal In Bohemia, The Red-Headed League, The Adventure Of The Blue Carbuncle, The Adventure Of The Speckled Band, Silver Blaze, The Musgrave Ritual, The Final Problem, The Adventure Of The Empty House, The Adventure Of The Dancing Men, The Adventure Of The Six Napoleons, The Adventure Of The Bruce-Partington Plans
+</td>
+</tr>
+<tr>
+<td>
+★★★★
+</td>
+<td style="padding: 10px;">
+The Man With The Twisted Lip, The Adventure Of The Copper Beeches, The Naval Treaty, The Adventure Of The Solitary Cyclist, The Adventure Of The Priory School, The Adventure Of Charles Augustus Milverton The Adventure Of The Abbey Grange, The Adventure Of The Second Stain, The Adventure Of The Devil’s Foot, His Last Bow, The Problem Of Thor Bridge
+</td>
+</tr>
+<tr>
+<td>
+★★★
+</td>
+<td style="padding: 10px;">
+The Boscombe Valley Mystery, The Five Orange Pips, The Adventure Of The Engineer’s Thumb, The “Gloria Scott”, The Crooked Man, The Greek Interpreter, The Adventure Of The Norwood Builder, The Adventure Of Black Peter, The Adventure Of The Cardboard Box, The Adventure Of The Dying Detective, The Illustrious Client, The Adventure Of The Lion’s Mane
+</td>
+</tr>
+<tr>
+<td>
+★★
+</td>
+<td style="padding: 10px;">
+A Case Of Identity, The Adventure Of The Noble Bachelor, The Yellow Face, The Reigate Puzzle, The Resident Patient, The Adventure Of Wisteria Lodge, The Adventure Of The Red Circle, The Disappearance Of Lady Frances Carfax, The Adventure Of The Three Garridebs, The Adventure Of The Creeping Man, The Adventure Of Shoscombe Old Place
+</td>
+</tr>
+<tr>
+<td>
+★
+</td>
+<td style="padding: 10px;">
+The Adventure Of The Beryl Coronet, The Stock-Broker’s Clerk, The Adventure Of The Three Students, The Adventure Of The Golden Pince-Nez, The Adventure Of The Missing Three-Quarter, The Blanched Soldier, The Adventure Of The Mazarin Stone, The Adventure Of The Three Gables, The Adventure Of The Sussex Vampire, The Adventure Of The Veiled Lodger, The Adventure Of The Retired Colourman
+</td>
+</tr>
+</table>
+<h2 id="data-overview">Data Overview</h2>
+<p>In this article I’ll skip over the data preparation and just cover the regression modeling and its conclusions. The file <a href="HolmesFeatures.csv">HolmesFeatures.csv</a> contains 60 observations, one for each of the 56 short stories and one for each of the four novels. Descriptions for the columns are as follows:</p>
+<dl>
+<dt>title</dt>
+<dd>Title of the story/novel
+</dd>
+<dt>abbrev</dt>
+<dd>The standard 4 character abbreviation for the story/novel (ENGR, 3STU, etc.).
+</dd>
+<dt>rank</dt>
+<dd>The ranking of the story/novel from the 1999 poll. For the stories this ranges from 1 (best) to 56 (worst) and for the novels it ranges from 1 (best) to 4 (worst).
+</dd>
+<dt>pubdate</dt>
+<dd>Year and month of publication (1890-Feb, 1891-Jul, etc.).
+</dd>
+<dt>collection</dt>
+<dd>The collection in which the story was published. This is either adventures, memoirs, return, bow, casebook or (in the case of the novels), novel.
+</dd>
+<dt>avg_chars_per_word</dt>
+<dd>The average number of characters per word.
+</dd>
+<dt>avg_words_per_sentence</dt>
+<dd>The average number of words per sentence.
+</dd>
+<dt>num_words</dt>
+<dd>The total number of words.
+</dd>
+<dt>pct_dialog_words_with_exclamation</dt>
+<dd>The percentage of dialog words that end with “!”.
+</dd>
+<dt>pct_words_dialog</dt>
+<dd>The percentage of words which are dialog.
+</dd>
+<dt>pct_words_holmes</dt>
+<dd>The percentage of words that are “Holmes”.
+</dd>
+<dt>pct_words_type_name</dt>
+<dd>The percentage of words that are names (either first names or last names, and either male or female).
+</dd>
+<dt>pct_words_type_noun</dt>
+<dd>The percentage of words that are nouns.
+</dd>
+<dt>pct_words_type_other</dt>
+<dd>The percentage of words that are not one of the other types.
+</dd>
+<dt>pct_words_type_stopword</dt>
+<dd>The percentage of words that are stopwords (and, the, is, etc.).
+</dd>
+<dt>pct_words_type_verb</dt>
+<dd>The percentage of words that are verbs.
+</dd>
+<dt>pct_words_watson</dt>
+<dd>The percentage of words that are “Watson”.
+</dd>
+</dl>
+<h2 id="fitting-a-regression-model">Fitting a Regression Model</h2>
+<p>The first step is to get the data into R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># Clean up the workspace</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">graphics.off</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="co"># Read in data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>f &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;HolmesFeatures.csv&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="co"># Select only short stories (i.e. exclude novels)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>d &lt;-<span class="st"> </span><span class="kw">subset</span>(f, collection <span class="op">!=</span><span class="st"> &quot;novel&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="co"># Convert rank (1=best to 56=worst) into quality (1=worst to 5=best)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>d<span class="op">$</span>quality &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">cut</span>(<span class="op">-</span>d<span class="op">$</span>rank, <span class="dv">5</span>, <span class="dt">labels=</span><span class="ot">FALSE</span>))</span></code></pre></div>
+<p>Now we need to decide which variables to include in the regression. We have 12 variables that capture the statistical properties of the text and we would like to use these to predict the quality of the story on a scale of 1 to 5. However, we only have 56 observations (i.e. stories), so forcing all 12 variables into the model would almost certainly result in unreliable parameter estimates for some variables. Instead we will use cross-validation to pick the optimal number of variables that avoid overfitting our data. We use R’s stepwise variable selection to create models of increasing complexity, and then check the cross- validated mean-squared error of each of these models.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># Define formula with all eligible variables for the regression</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>fml.full &lt;-<span class="st"> </span><span class="kw">formula</span>(quality <span class="op">~</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="st">  </span>avg_chars_per_word <span class="op">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="st">  </span>avg_words_per_sentence <span class="op">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="st">    </span>num_words <span class="op">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="st">  </span>pct_dialog_words_with_exclamation <span class="op">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="st">  </span>pct_words_dialog <span class="op">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="st">  </span>pct_words_holmes <span class="op">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="st">  </span>pct_words_type_name <span class="op">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="st">  </span>pct_words_type_noun <span class="op">+</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="st">  </span>pct_words_type_other <span class="op">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="st">  </span>pct_words_type_stopword <span class="op">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="st">  </span>pct_words_type_verb <span class="op">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="st">  </span>pct_words_watson)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="co"># Create cross-validation folds</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>cv.ind &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">length.out =</span> <span class="kw">nrow</span>(d)))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a><span class="co"># Create models of increasing complexity, compute cross-validation error</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>max.vars &lt;-<span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">8</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>mse &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="kw">length</span>(max.vars))</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(max.vars)) {</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>  pred &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="kw">nrow</span>(d))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>    train &lt;-<span class="st"> </span>cv.ind <span class="op">!=</span><span class="st"> </span>k</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>    test &lt;-<span class="st"> </span><span class="op">!</span>train</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>    m.null &lt;-<span class="st"> </span><span class="kw">lm</span>(quality <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, d, <span class="dt">subset =</span> train)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>    m.sel &lt;-<span class="st"> </span><span class="kw">step</span>(m.null, fml.full, <span class="dt">steps =</span> max.vars[i], <span class="dt">k =</span> <span class="dv">0</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>    pred[test] &lt;-<span class="st"> </span><span class="kw">predict</span>(m.sel, d)[test]</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>  }</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>  mse[i] &lt;-<span class="st"> </span><span class="kw">mean</span>((pred <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>quality)<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>}</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a><span class="co"># Examine error vs. number of variables in model</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a><span class="kw">plot</span>(max.vars, mse, <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Number of variables in model&quot;</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a>  <span class="dt">ylab =</span> <span class="st">&quot;Cross-Validation Error&quot;</span>, <span class="dt">xaxp =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dv">8</span>))</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a><span class="kw">points</span>(max.vars[<span class="kw">which.min</span>(mse)], <span class="kw">min</span>(mse), <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<figure>
+<img src="variable_selection.png" alt="" /><figcaption>Cross-validated error</figcaption>
+</figure>
+<p>Great, it looks like a model with three variables gives us the best performance. Let’s refit a three-variable model on all the data and take a look at the results.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co"># Fit model</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>m.null &lt;-<span class="st"> </span><span class="kw">lm</span>(quality <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, d)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>m.sel &lt;-<span class="st"> </span><span class="kw">step</span>(m.null, fml.full, <span class="dt">steps =</span> <span class="dv">3</span>, <span class="dt">k =</span> <span class="dv">0</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="co"># Examine results</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">summary</span>(m.sel)</span></code></pre></div>
+<pre class="text"><code>Coefficients:
+                         Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)             1.412e-01  1.486e+00   0.095 0.924651
+num_words               3.408e-04  9.359e-05   3.642 0.000625 ***
+pct_words_dialog       -4.873e-02  1.519e-02  -3.208 0.002287 **
+avg_words_per_sentence  2.361e-01  7.776e-02   3.037 0.003733 **
+
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>OK, we have a model that suggests there are some strong relationships between the statistical properties of the text and the quality of a Sherlock Holmes story! So how do we interpret these results? The magnitude and sign of the coefficient estimates tell us the effect of each variable on the quality of the story. Here’s what we conclude:</p>
+<ul>
+<li><strong>Longer stories are better.</strong> The quality of a story increases by 1 star for every 2,934 words in a story.</li>
+<li><strong>Lots of dialog is a bad thing.</strong> The quality of a story decreases by 1 star for each 20 percentage point increase in the amount of dialog.</li>
+<li><strong>Longer sentences are better.</strong> The quality of a story increases by 1 star as the average sentence length increases by 4 words.</li>
+</ul>
+<h2 id="model-performance">Model Performance</h2>
+<p>Although this is a very simple model with only three variables it does surprisingly well at predicting the quality of a story. The table below shows the actual quality of each story (as determined by a poll of experts) versus the quality predicted by the model. In many cases the model precisely agrees with the experts (indicated by a set of green stars). Even in the cases where the model is wrong (shown in red), it is usually only off by one star.</p>
+<table class="table">
+<tr>
+<th>
+Story
+</th>
+<th>
+Actual Quality
+</th>
+<th>
+Predicted Quality
+</th>
+</tr>
+<tr>
+<td>
+A Scandal In Bohemia
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Red-headed League
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+A Case Of Identity
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Boscombe Valley Mystery
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Five Orange Pips
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#aa0000">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Man With The Twisted Lip
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Blue Carbuncle
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Speckled Band
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Engineer’s Thumb
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Noble Bachelor
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Beryl Coronet
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Copper Beeches
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+Silver Blaze
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Yellow Face
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Stock-broker’s Clerk
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#aa0000">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The “gloria Scott”
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Musgrave Ritual
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Reigate Puzzle
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Crooked Man
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Resident Patient
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Greek Interpreter
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Naval Treaty
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Final Problem
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Empty House
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Norwood Builder
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Dancing Men
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Solitary Cyclist
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Priory School
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of Black Peter
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of Charles Augustus Milverton
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Six Napoleons
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Three Students
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#00aa00">★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Golden Pince-nez
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Missing Three-quarter
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Abbey Grange
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Second Stain
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of Wisteria Lodge
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Cardboard Box
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#00aa00">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Red Circle
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#00aa00">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Bruce-partington Plans
+</td>
+<td>
+★★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Dying Detective
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#aa0000">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Disappearance Of Lady Frances Carfax
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Devil’s Foot
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+His Last Bow
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Illustrious Client
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Blanched Soldier
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#aa0000">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Mazarin Stone
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#00aa00">★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Three Gables
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#00aa00">★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Sussex Vampire
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#aa0000">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Three Garridebs
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#00aa00">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Problem Of Thor Bridge
+</td>
+<td>
+★★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Creeping Man
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#aa0000">★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Lion’s Mane
+</td>
+<td>
+★★★
+</td>
+<td>
+<span style="color:#aa0000">★★★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Veiled Lodger
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#00aa00">★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of Shoscombe Old Place
+</td>
+<td>
+★★
+</td>
+<td>
+<span style="color:#00aa00">★★</span>
+</td>
+</tr>
+<tr>
+<td>
+The Adventure Of The Retired Colourman
+</td>
+<td>
+★
+</td>
+<td>
+<span style="color:#00aa00">★</span>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Pricing a Diamond</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #c4a000; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #000000; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #000000; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #000000; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/base.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Pricing a Diamond</h1>
+</header>
+<p><a href="/">← Back to main page</a></p>
+<p>I recently got engaged to wonderful girl, and as any guy who has gone through this process knows, choosing the right ring can be a tricky decision! Fortunately I had a pretty good idea of my fiance’s tastes: a classic platinum band with a solitaire round cut diamond. Not all diamonds are equal, of course. You may have heard of “the Four C’s” that define the quality of a diamond: cut, clarity, color and carats.</p>
+<p>Until I started carefully looking at diamonds (thanks Shane Company) I had no idea what the Four C’s really meant in terms of the physical appearance of a diamond. To my completely untrained eye, carat and color have the greatest impact on the appearance of a diamond but this is a matter of personal preference. What is for certain is that the price of a diamond varies dramatically with the Four C’s. But how exactly does each characteristic affect the price? We can build a statistical model to find out.</p>
+<p>The basic steps are:</p>
+<ol type="1">
+<li>Webscrape data on 30,000 diamonds from www.brilliance.com</li>
+<li>Fit a statistical model using R to predict price given the Four C’s</li>
+<li>Import the model into Mathematica and give it a nice user interface</li>
+</ol>
+<figure>
+<img src="pricingadiamond.jpg" alt="" /><figcaption>Mathematica Diamond Demonstration</figcaption>
+</figure>
+<p>The final result is available at <a href="http://demonstrations.wolfram.com/PricingADiamond/">Pricing a Diamond</a> on the Wolfram Demonstrations site. This page gives some detailed background on the steps used to obtain the data and fit the model.</p>
+<h2 id="webscraping-diamond-data">Webscraping Diamond Data</h2>
+<p>Several websites provide a searchable database of diamonds: <a href="http://www.bluenile.com/diamond-search">Blue Nile</a> and <a href="http://www.brilliance.com/diamond-search">Brilliance.com</a> to name a couple. These sites provide the perfect data source from which to build our statistical model since they have information on cut, carat, color, clarity and price for thousands of diamonds. The trick is getting the information out of the website and into a file for analysis.</p>
+<p>All of these sites return their diamond search results in small batches which means it can take a long time to page through manually and save off the HTML for thousands of diamonds. Normally this would be a perfect task for automation using Python’s urllib library. Unfortunately all these sites make extensive use of JavaScript in their search results, and since urrlib doesn’t include a JavaScript engine Python is unable to crawl the search results programmatically.</p>
+<p>Instead we will automate the process through Windows Scripting. Using a short VBScript program we can programmatically control Internet Explorer so that it starts paging through the search results and saving off the HTML as if controlled by an invisible hand! It is easiest to do this with the search results from Brilliance.com because the URL from their searches actually contains the page number of the results so it is simple to programmatically construct the URL from a series of integers.</p>
+<p>To start, make sure you have Internet Explorer open and pointing to the first page of results from your diamond search on Brilliance.com. Place the following code into a file called get_data.vbs and double-click it in the Windows Explorer. Internet Explorer will start paging through the results, then saving off the HTML files. You may need to tweak some of this code to make it work on your system.</p>
+<pre class="text"><code>Dim WshShell, objOutputFile, PageCache
+Set WshShell = WScript.CreateObject(&quot;WScript.Shell&quot;)
+Set oIE = CreateObject(&quot;InternetExplorer.Application&quot;)
+oIE.Visible = True
+oIE.Navigate &quot;http://www.brilliance.com/diamonds/search/Diamond_Results.aspx?SK=&quot;
+
+Do While oIE.Busy Or (oIE.READYSTATE &lt;&gt; 4)
+    Wscript.Sleep 100
+Loop
+
+&#39;Write results to a text file
+PageCache = oIE.document.body.innerHTML
+Set objFileSystem = CreateObject(&quot;Scripting.fileSystemObject&quot;)
+Set objOutputFile = objFileSystem.CreateTextFile(&quot;c:\html\html1.html&quot;, 2, TRUE)
+objOutputFile.WriteLine(PageCache)
+objOutputFile.Close
+
+For i = 2 to 1000
+
+    url = &quot;javascript:SetPageNumber(&#39;&quot; &amp; i &amp; &quot;&#39;);__doPostBack(&#39;lnkCOLOR&#39;,&#39;&#39;);&quot;
+
+    oIE.Navigate url
+
+    Do While oIE.Busy Or (oIE.READYSTATE &lt;&gt; 4)
+        Wscript.Sleep 100
+    Loop
+
+    &#39;Write results to a text file
+    PageCache = oIE.document.body.innerHTML
+    Set objFileSystem = CreateObject(&quot;Scripting.fileSystemObject&quot;)
+    fileName = &quot;c:\html\&quot; &amp; i &amp; &quot;.html&quot;
+    Set objOutputFile = objFileSystem.CreateTextFile(fileName, 2, TRUE)
+    objOutputFile.WriteLine(PageCache)
+    objOutputFile.Close
+
+Next</code></pre>
+<p>Once you have all the HTML files stored away you can process them using Perl or Python to pull out the data on price, cut, carats, clarity and color. Below is the Python 3.1 code I used to construct a TSV (tab-separated-value) file of the data. The file is available <a href="diamonds.txt">here</a>.</p>
+<pre class="python3"><code>import glob
+
+def process_file(filename):
+
+    pat_tab = re.compile(&#39;&lt;TABLE.*?/TABLE&gt;&#39;, re.DOTALL)
+    pat_tr = re.compile(&#39;&lt;TR.*?/TR&gt;&#39;, re.DOTALL)
+    pat_td = re.compile(&#39;&lt;TD.*?/TD&gt;&#39;, re.DOTALL)
+    pat_entry = re.compile(&#39;&lt;TD.*&gt;(.*)&lt;/TD&gt;&#39;, re.DOTALL)
+
+    f = open(filename, encoding=&#39;utf_16&#39;)
+    text = f.read()
+    f.close()
+    tab = pat_tab.findall(text)
+    tab = [t for t in tab if &#39;resultGrid&#39; in t]
+    if len(tab) != 1:
+        return None
+
+    rows = pat_tr.findall(tab[0])
+
+    for row in rows:
+        vals = []
+        entries = pat_td.findall(row)
+        for entry in entries:
+            m = pat_entry.search(entry)
+            vals.append((m.group(1)))
+        if vals[1] == &#39;Round&#39;:
+            price = re.sub(&#39;[$,]&#39;, &#39;&#39;, vals[9])
+            print(vals[2], vals[3], vals[4], vals[5], price, sep=&#39;\t&#39;)
+
+print(&#39;carat&#39;, &#39;cut&#39;, &#39;color&#39;, &#39;clarity&#39;, &#39;price&#39;, sep=&#39;\t&#39;)
+for i in range(1, 1001):
+    process_file(&#39;c:/html/html&#39; + str(i) + &#39;.html&#39;)</code></pre>
+<h2 id="model-fitting-in-r">Model Fitting in R</h2>
+<p>Now that we have the raw data in a nice TSV file, the next step is to build a statistical model that predicts price from the four C’s. The initial step is to recode the data into a purely numerical format. Characteristics such as clarity are rated on a nominal scale from F (flawless) to I3 (heavily included, i.e. flawed). The <a href="http://www.thediamondbuyingguide.com/fourcsofdiamonds.html">Diamond Buying Guide</a> has excellent information on the scales for each of the Four C’s. We’ll use Python (again, version 3.1) to translate the nominal characteristics into numeric variables so they can be fit using a generalized linear model.</p>
+<pre class="python3"><code>cut_map = {&#39;Ideal&#39;:4,
+           &#39;Excellent&#39;:3,
+           &#39;Very Good&#39;:2,
+           &#39;Good&#39;:1}
+
+color_map = {&#39;D&#39;:10,
+             &#39;E&#39;:9,
+             &#39;F&#39;:8,
+             &#39;G&#39;:7,
+             &#39;H&#39;:6,
+             &#39;I&#39;:5,
+             &#39;J&#39;:4,
+             &#39;K&#39;:3,
+             &#39;L&#39;:2,
+             &#39;M&#39;:1}
+
+clarity_map = {&#39;FL&#39;:10,
+               &#39;IF&#39;:9,
+               &#39;VVS1&#39;:8,
+               &#39;VVS2&#39;:7,
+               &#39;VS1&#39;:6,
+               &#39;VS2&#39;:5,
+               &#39;SI1&#39;:4,
+               &#39;SI2&#39;:3,
+               &#39;SI3&#39;:2,
+               &#39;I1&#39;:1}
+
+f = open(&#39;diamonds.txt&#39;)
+print(f.readline(), end=&#39;&#39;)
+for line in f:
+    (carat, cut, color, clarity, price) = line.strip().split(&#39;\t&#39;)
+    print(carat, cut_map[cut], color_map[color], clarity_map[clarity],
+        price, sep=&#39;\t&#39;)
+f.close()</code></pre>
+<p>The coded output data is stored in <a href="diamonds_coded.txt">diamonds_coded.txt</a>. Next we’ll use the statistical package R to model the price. Let’s take a quick look at price vs. carats to see what kind of model we should use:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>d &lt;-<span class="st"> </span><span class="kw">read.delim</span>(<span class="st">&quot;diamonds_coded.txt&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>x &lt;-<span class="st"> </span><span class="kw">tapply</span>(d<span class="op">$</span>price <span class="op">/</span><span class="st"> </span><span class="dv">1000</span>, <span class="kw">round</span>(d<span class="op">$</span>carat), mean)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="kw">plot</span>(<span class="kw">as.numeric</span>(<span class="kw">names</span>(x)), x, <span class="dt">type=</span><span class="st">&quot;b&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Carats&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Price ($K)&quot;</span></span></code></pre></div>
+<figure>
+<img src="price_carats.png" alt="" /><figcaption>Price vs. Carats</figcaption>
+</figure>
+<p>The line shows a clear exponential trend, which suggests using a generalized linear model with a log link to predict price. The code below fits this model, but also includes some higher-order interactions to capture the complex relationships between the four variables and price.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>gm &lt;-<span class="st"> </span><span class="kw">glm</span>(price <span class="op">~</span><span class="st"> </span>cut <span class="op">*</span><span class="st"> </span>clarity <span class="op">*</span><span class="st"> </span>color <span class="op">*</span><span class="st"> </span>carat <span class="op">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">I</span>(cut<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(clarity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(color<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(carat<span class="op">^</span><span class="dv">2</span>), <span class="dt">family=</span>poisson, d)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>testdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">cut=</span><span class="kw">rep</span>(<span class="dv">4</span>, <span class="dv">100</span>), <span class="dt">clarity=</span><span class="kw">rep</span>(<span class="dv">5</span>, <span class="dv">100</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>  <span class="dt">color=</span><span class="kw">rep</span>(<span class="dv">9</span>, <span class="dv">100</span>), <span class="dt">carat=</span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dt">length=</span><span class="dv">100</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="kw">plot</span>(test<span class="op">$</span>carat, <span class="kw">predict</span>(gm, test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>), <span class="dt">xlab=</span><span class="st">&quot;Carats&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>  <span class="dt">ylab=</span><span class="st">&quot;Price ($)&quot;</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="kw">grid</span>()</span></code></pre></div>
+<p>Here are the predictions from the model for price vs. carats; they closely match the observed data in the previous figure, which is good.</p>
+<figure>
+<img src="price_carats_model.png" alt="" /><figcaption>Modeled Price vs. Carats</figcaption>
+</figure>
+<h2 id="importing-the-model-into-mathematica">Importing the Model into Mathematica</h2>
+<p>Mathematica 6.0 has the ability to quickly create dynamic user interfaces using the Manipulate function. The last step in this project is to export the model coefficients from R and import them into Mathematica, then wrap a GUI around them using Manipulate so users can interactively explore the relationship between the Four C’s and price. The actual model is fairly complex since it has a lot of interaction terms, but it isn’t too much work to just paste it into a Mathematica notebook and create a function for price. Here is the Mathematica code for the final model:</p>
+<figure>
+<img src="model.png" alt="" /><figcaption>Final Model</figcaption>
+</figure>
+<p>The final result is available at <a href="http://demonstrations.wolfram.com/PricingADiamond/">Pricing a Diamond</a> on the Wolfram Demonstrations site.</p>
+</body>
+</html>
