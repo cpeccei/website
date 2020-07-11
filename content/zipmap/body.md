@@ -2,6 +2,8 @@
 title: Drawing ZIP Code Boundaries
 ---
 
+[&larr; Back to main page](/)
+
 Local governments have made a wide variety of data available at the ZIP
 code level. A great way of visualizing this information is to use a
 choropleth map, in which each ZIP code is colored by the intensity of
