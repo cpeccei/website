@@ -1,12 +1,26 @@
 ---
 title: Christian Peccei's Homepage
 header-includes: |
-    <style>img {vertical-align: middle; margin-right: 20px;}</style>
+    <style>img {vertical-align: middle; margin-right: 20px;}
+    div p {
+        display: table;
+    }
+    div a {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    div img {
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 24px;
+        min-width: 64px;
+    }
+    </style>
 ---
 
-Hello and welcome! In my spare time I enjoy working on fun data mining and
-programming projects. If you have suggestions or questions please let me know;
-my email is my first name dot last name at gmail.
+Hello and welcome to my homepage! In my spare time I enjoy working on fun data
+mining and programming projects. If you have suggestions or questions please let
+me know; my email is my first name dot last name at gmail.
 
 On the professional side, I am Director of Analytics at
 [23andMe](https://www.23andme.com). It's a great company to work for; please
@@ -14,6 +28,8 @@ send me a note if you're interested in career opportunities. My team has
 analysts and data scientists with a diverse set of skills and backgrounds.
 
 ## Projects
+
+<div>
 
 ![Icon](/doublets-in-python/icon.png)
 [Solving Doublets (Word Ladders) in Python](/doublets-in-python/)
@@ -45,4 +61,5 @@ analysts and data scientists with a diverse set of skills and backgrounds.
 ![Icon](/zipmap/icon.png)
 [Drawing ZIP Code Boundaries](/zipmap/)
 
+</div>
 
