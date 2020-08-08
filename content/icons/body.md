@@ -3,18 +3,13 @@ title: Icons
 header-includes: |
     <style>
     div p {
-        display: table;
-    }
-    div span {
-        display: table-cell;
-        vertical-align: middle;
+      display: grid;
+      grid-template-columns: 60px auto;
+      align-items: center;
     }
     div img {
-        display: table-cell;
-        vertical-align: middle;
-        padding-right: 24px;
-        width: 40px;
-        filter:contrast(70%);
+      width: 40px;
+      filter:contrast(70%);
     }
     </style>
 ---
