@@ -62,7 +62,7 @@ from [the Noun Project](https://thenounproject.com/)</span>
 ["House"](https://thenounproject.com/term/house/1233598) icon by Made by Made, AU
 from [the Noun Project](https://thenounproject.com/)</span>
 
-![Map](/homeprice/icon.png)<span>
+![Map](/zipmap/icon.png)<span>
 ["Map"](https://thenounproject.com/term/map/2423110) icon by hafiudin
 from [the Noun Project](https://thenounproject.com/)</span>
 
