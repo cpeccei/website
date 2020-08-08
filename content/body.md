@@ -1,7 +1,7 @@
 ---
 title: Christian Peccei's Homepage
 header-includes: |
-    <style>img {vertical-align: middle; margin-right: 20px;}
+    <style>
     div p {
         display: table;
     }
@@ -13,7 +13,8 @@ header-includes: |
         display: table-cell;
         vertical-align: middle;
         padding-right: 24px;
-        min-width: 64px;
+        width: 40px;
+        filter:contrast(70%);
     }
     </style>
 ---
@@ -63,3 +64,6 @@ analysts and data scientists with a diverse set of skills and backgrounds.
 
 </div>
 
+<br><br>
+Icons are from [the Noun Project](https://thenounproject.com/).
+Attribution details [here](/icons).
