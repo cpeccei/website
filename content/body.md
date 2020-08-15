@@ -27,6 +27,9 @@ analysts and data scientists with a diverse set of skills and backgrounds.
 
 <div>
 
+![Icon](/ec2-datascience/icon.png)
+[Bulding a Data Science AMI for AWS EC2](/ec2-datascience/)
+
 ![Icon](/doublets-in-python/icon.png)
 [Solving Doublets (Word Ladders) in Python](/doublets-in-python/)
 

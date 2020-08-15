@@ -21,6 +21,10 @@ using the Creative Commons CCBY License. Attribution details below.
 
 <div>
 
+![Analysis](/ec2-datascience/icon.png)<span>
+["Analysis"](https://thenounproject.com/term/analysis/3481060) icon by iconixar
+from [the Noun Project](https://thenounproject.com/)</span>
+
 ![Chain](/doublets-in-python/icon.png)<span>
 ["Chain"](https://thenounproject.com/term/chain/2848737) icon by TTHNga, VN
 from [the Noun Project](https://thenounproject.com/)</span>
