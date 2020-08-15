@@ -19,7 +19,7 @@ mining and programming projects. If you have suggestions or questions please let
 me know; my email is my first name dot last name at gmail.
 
 On the professional side, I am Director of Analytics at
-[23andMe](https://www.23andme.com). It's a great company to work for; please
+[23andMe](https://www.23andme.com). It's a great company to work for, please
 send me a note if you're interested in career opportunities. My team has
 analysts and data scientists with a diverse set of skills and backgrounds.
 
@@ -28,7 +28,7 @@ analysts and data scientists with a diverse set of skills and backgrounds.
 <div>
 
 ![Icon](/ec2-datascience/icon.png)
-[Bulding a Data Science AMI for AWS EC2](/ec2-datascience/)
+[Building a Data Science AMI for AWS EC2](/ec2-datascience/)
 
 ![Icon](/doublets-in-python/icon.png)
 [Solving Doublets (Word Ladders) in Python](/doublets-in-python/)

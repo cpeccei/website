@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Bulding a Data Science AMI for AWS EC2</title>
+  <title>Building a Data Science AMI for AWS EC2</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -12,6 +12,67 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #c4a000; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #000000; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #000000; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #000000; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="/base.css" />
@@ -21,28 +82,219 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Bulding a Data Science AMI for AWS EC2</h1>
+<h1 class="title">Building a Data Science AMI for AWS EC2</h1>
 </header>
 <p><a href="/">← Back to main page</a></p>
 <p>August 15, 2020</p>
-<p>This page outlines the current AMI I use for data science projects on AWS EC2. I update this stack every couple of months when new versions of the software are released.</p>
+<p>This page outlines the current AMI I use for data science projects on AWS EC2. I update this stack every couple of months when new versions of the base software are released.</p>
 <h3 id="whats-included-and-why">What’s included and why</h3>
 <dl>
-<dt>R 3.6.3</dt>
-<dd><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<dt>Amazon Linux 2</dt>
+<dd><p>The AMI is built on <a href="https://aws.amazon.com/amazon-linux-2/">Amazon Linux 2</a> which has a good selection of packages and is optimized for EC2. It’s mostly compatible with CentOS / Redhat packages which is helpful for installing pre-compiled software like Rstudio Server. You can also add EPEL (see <a href="https://aws.amazon.com/premiumsupport/knowledge-center/ec2-enable-epel/">here for instructions</a>) for access to a much broader range of packages.</p>
 </dd>
+<dt>R 3.6.3 + Tidyverse</dt>
+<dd><p>I use R for almost all my analysis, usually in conjunction with the <a href="https://www.tidyverse.org/">tidyverse</a>. Check out <a href="https://r4ds.had.co.nz/">R for Data Science</a> for a good introduction. The latest version of R is actually 4.0.2 but I prefer to wait for a .1 release before switching to a major new version so for now I am using 3.6.3.</p>
+</dd>
+<dt>RStudio Server</dt>
+<dd><p>The AMI uses the open-source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">Rstudio Server</a> to provide a browser-based graphical interface to R running on EC2. Although Rstudio Server can support multiple users, I use it exclusively in single-user mode and don’t allow logins from the open internet; instead I just tunnel via ssh on port 8787. See the code below for details.</p>
+</dd>
+</dl>
+<figure>
+<img src="Rstudio.png" alt="" /><figcaption>R running in the browser via Rstudio Server (from <a href="https://en.wikipedia.org/wiki/RStudio">Wikipedia</a>)</figcaption>
+</figure>
+<dl>
 <dt>Python 3.7 + Pandas + Jupyter</dt>
-<dd><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<dd><p>Python 3.7 is the standard Python version that comes with Amazon Linux 2. I write quite a bit of Python code but usually for ETL jobs or shell scripts rather than analytical tasks (I prefer R for that purpose). However, I always install Pandas and Jupyter as they are key tools for data science.</p>
+</dd>
+<dt>Various Utilities</dt>
+<dd><p>These include the latest versions of <a href="https://pandoc.org/">Pandoc</a> for processing markdown and Rmarkdown, <a href="https://stedolan.github.io/jq/">jq</a> for command-line JSON parsing, and the <a href="https://aws.amazon.com/cli/">AWS CLI</a> for interacting with AWS services. The version of the AWS CLI that comes with Amazon Linux 2 is quite old so I always install the latest version in Python virtual environment so it can be updated more regularly.</p>
 </dd>
 </dl>
 <h3 id="how-its-built">How it’s built</h3>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 <h3 id="code">Code</h3>
-<pre><code>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</code></pre>
+<p>Packer file <code>datascience.json</code></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="dt">&quot;builders&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;amazon-ebs&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>      <span class="dt">&quot;region&quot;</span><span class="fu">:</span> <span class="st">&quot;us-west-1&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="dt">&quot;source_ami&quot;</span><span class="fu">:</span> <span class="st">&quot;ami-04e59c05167ea7bd5&quot;</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>      <span class="dt">&quot;instance_type&quot;</span><span class="fu">:</span> <span class="st">&quot;c5.xlarge&quot;</span><span class="fu">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>      <span class="dt">&quot;ssh_username&quot;</span><span class="fu">:</span> <span class="st">&quot;ec2-user&quot;</span><span class="fu">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>      <span class="dt">&quot;ami_name&quot;</span><span class="fu">:</span> <span class="st">&quot;packer-datascience 20200613 {{timestamp}}&quot;</span><span class="fu">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>      <span class="dt">&quot;launch_block_device_mappings&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="fu">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>          <span class="dt">&quot;device_name&quot;</span><span class="fu">:</span> <span class="st">&quot;/dev/xvda&quot;</span><span class="fu">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>          <span class="dt">&quot;volume_size&quot;</span><span class="fu">:</span> <span class="dv">20</span><span class="fu">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>          <span class="dt">&quot;volume_type&quot;</span><span class="fu">:</span> <span class="st">&quot;gp2&quot;</span><span class="fu">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>          <span class="dt">&quot;delete_on_termination&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>        <span class="fu">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>      <span class="ot">]</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>    <span class="fu">}</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>  <span class="dt">&quot;provisioners&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>    <span class="fu">{</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;file&quot;</span><span class="fu">,</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>      <span class="dt">&quot;source&quot;</span><span class="fu">:</span> <span class="st">&quot;./install.sh&quot;</span><span class="fu">,</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>      <span class="dt">&quot;destination&quot;</span><span class="fu">:</span> <span class="st">&quot;/tmp/&quot;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a>    <span class="fu">{</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;shell&quot;</span><span class="fu">,</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a>      <span class="dt">&quot;inline&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a>        <span class="st">&quot;sudo bash /tmp/install.sh&quot;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a>      <span class="ot">]</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a>    <span class="fu">}</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true"></a>  <span class="ot">]</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true"></a><span class="fu">}</span></span></code></pre></div>
+<p>Installation script <code>install.sh</code> run by packer to build the AMI.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="co"># Update and install packages</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="ex">yum</span> update -y</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="ex">yum</span> install -y emacs pigz python3 git ImageMagick</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="st">(setq inhibit-splash-screen t)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="st">(setq make-backup-files nil)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="st">(setq-default indent-tabs-mode nil)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="st">(electric-indent-mode -1)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="st">&quot;</span> <span class="op">&gt;&gt;</span> /usr/share/emacs/site-lisp/site-start.el</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="co"># In Fedora /usr/local/bin/ isn&#39;t in the standard path. It is</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="co"># added by the login program (see man login), which doesn&#39;t run</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="co"># when calling a bash script from cron. For simplicity, add it to</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="co"># path for all users.</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&#39;export PATH=&quot;/usr/local/bin/:$PATH&quot;&#39;</span> <span class="op">&gt;&gt;</span> /etc/profile.d/custom.sh</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="co"># Source the file to pick up these changes for the rest of the script</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a><span class="bu">.</span> <span class="ex">/etc/profile.d/custom.sh</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a><span class="co"># To hold installation files</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a><span class="co"># Install jq</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="ex">curl</span> -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 <span class="kw">\</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>    <span class="ex">-o</span> /usr/local/bin/jq</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a><span class="fu">chmod</span> a+rx /usr/local/bin/jq</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a><span class="co"># Install texlive</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a><span class="ex">yum</span> install -y perl-Digest-MD5</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a><span class="fu">wget</span> http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a><span class="fu">tar</span> xvf install-tl-unx.tar.gz</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a><span class="bu">cd</span> install-tl-*</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a><span class="co"># Get profile. Note that we have selected to add symlinks to /usr/local/bin</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a><span class="co"># rather than adding to the PATH variable. This is because rstudio server</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a><span class="co"># open source version does not properly inherit the PATH variable from</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a><span class="co"># custom.sh, instead it sets its own path which DOES include /usr/local/bin.</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&#39;</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a><span class="st">selected_scheme scheme-custom</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a><span class="st">TEXDIR /usr/local/texlive/2020</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a><span class="st">TEXMFCONFIG ~/.texlive2020/texmf-config</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a><span class="st">TEXMFHOME ~/texmf</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a><span class="st">TEXMFLOCAL /usr/local/texlive/texmf-local</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a><span class="st">TEXMFSYSCONFIG /usr/local/texlive/2020/texmf-config</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a><span class="st">TEXMFSYSVAR /usr/local/texlive/2020/texmf-var</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a><span class="st">TEXMFVAR ~/.texlive2020/texmf-var</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a><span class="st">binary_x86_64-linux 1</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a><span class="st">collection-basic 1</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a><span class="st">collection-fontsrecommended 1</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true"></a><span class="st">collection-latex 1</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true"></a><span class="st">collection-latexextra 1</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true"></a><span class="st">collection-latexrecommended 1</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true"></a><span class="st">collection-metapost 1</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true"></a><span class="st">collection-xetex 1</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true"></a><span class="st">instopt_adjustpath 1</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true"></a><span class="st">instopt_adjustrepo 1</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true"></a><span class="st">instopt_letter 1</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true"></a><span class="st">instopt_portable 0</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true"></a><span class="st">instopt_write18_restricted 1</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true"></a><span class="st">tlpdbopt_autobackup 1</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true"></a><span class="st">tlpdbopt_backupdir tlpkg/backups</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true"></a><span class="st">tlpdbopt_create_formats 1</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true"></a><span class="st">tlpdbopt_desktop_integration 1</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true"></a><span class="st">tlpdbopt_file_assocs 1</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true"></a><span class="st">tlpdbopt_generate_updmap 0</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true"></a><span class="st">tlpdbopt_install_docfiles 0</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true"></a><span class="st">tlpdbopt_install_srcfiles 0</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true"></a><span class="st">tlpdbopt_post_code 1</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true"></a><span class="st">tlpdbopt_sys_bin /usr/local/bin</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true"></a><span class="st">tlpdbopt_sys_info /usr/local/info</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true"></a><span class="st">tlpdbopt_sys_man /usr/local/man</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true"></a><span class="st">tlpdbopt_w32_multi_user 1</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true"></a><span class="st">&#39;</span> <span class="op">&gt;</span> texlive-install.profile</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true"></a><span class="ex">./install-tl</span> -profile texlive-install.profile</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true"></a><span class="fu">rm</span> -rf install-tl-*</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true"></a><span class="fu">wget</span> https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true"></a><span class="fu">tar</span> xvzf pandoc-2.9.2.1-linux-amd64.tar.gz --strip-components 1 -C /usr/local</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true"></a><span class="fu">rm</span> -rf pandoc-2.9.2*</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true"></a><span class="co"># Various development packages needed to compile R</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true"></a><span class="ex">yum</span> install -y gcc gcc-gfortran gcc-c++</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true"></a><span class="ex">yum</span> install -y readline-devel zlib-devel bzip2-devel xz-devel pcre-devel</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true"></a><span class="ex">yum</span> install -y libcurl-devel libpng-devel cairo-devel pango-devel</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true"></a></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true"></a><span class="co"># Install R</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true"></a><span class="ex">curl</span> -O https://cran.r-project.org/src/base/R-3/R-3.6.3.tar.gz</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true"></a><span class="fu">tar</span> xvf R-3.6.3.tar.gz</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true"></a><span class="bu">cd</span> R-3.6.3</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true"></a><span class="ex">./configure</span> --with-x=no --enable-R-shlib</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true"></a><span class="co"># Use 4 cores to speed up build</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true"></a><span class="fu">make</span> -j 4</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true"></a><span class="fu">make</span> install</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true"></a><span class="fu">rm</span> -rf R-3.6.3*</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true"></a><span class="co"># Install tidyverse</span></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true"></a><span class="ex">yum</span> install -y libxml2-devel openssl-devel</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&#39;options(repos = c(CRAN=&quot;https://cran.r-project.org/&quot;))&#39;</span> <span class="op">&gt;&gt;</span> /usr/local/lib64/R/etc/Rprofile.site</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true"></a><span class="ex">/usr/local/bin/R</span> -e <span class="st">&#39;install.packages(c(&quot;tidyverse&quot;), Ncpus = 4L)&#39;</span></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true"></a></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true"></a><span class="co"># Add rstudio</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true"></a><span class="ex">/usr/local/bin/R</span> -e <span class="st">&#39;install.packages(c(&quot;caTools&quot;, &quot;bitops&quot;, &quot;rprojroot&quot;))&#39;</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true"></a><span class="ex">curl</span> -O https://download2.rstudio.org/server/centos6/x86_64/rstudio-server-rhel-1.3.959-x86_64.rpm</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true"></a><span class="ex">yum</span> install -y --nogpgcheck rstudio-server-rhel-1.3.959-x86_64.rpm</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true"></a><span class="fu">rm</span> -f rstudio-server-rhel-1.3.959-x86_64.rpm</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true"></a><span class="co"># Will serve on port 8787 by default</span></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true"></a><span class="bu">echo</span> www-address=127.0.0.1 <span class="op">&gt;&gt;</span> /etc/rstudio/rserver.conf</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true"></a><span class="bu">echo</span> rsession-which-r=/usr/local/bin/R <span class="op">&gt;&gt;</span> /etc/rstudio/rserver.conf</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true"></a><span class="co"># Add password for ec2-user using passwd ec2-user then do</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true"></a><span class="co"># rstudio-server restart</span></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true"></a></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true"></a><span class="co"># Other useful R packages</span></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true"></a><span class="ex">/usr/local/bin/R</span> -e <span class="st">&#39;install.packages(c(&quot;corrplot&quot;, &quot;plotly&quot;, &quot;data.table&quot;, &quot;slider&quot;), Ncpus = 4L)&#39;</span></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true"></a></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true"></a><span class="co"># Parallel (installs into /usr/local/bin)</span></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true"></a><span class="ex">curl</span> pi.dk/3/ <span class="kw">|</span> <span class="fu">bash</span></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true"></a><span class="fu">rm</span> -rf parallel-*</span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true"></a></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true"></a><span class="co"># Datamash</span></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true"></a><span class="ex">yum</span> install -y perl-Digest-SHA perl-Data-Dumper</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true"></a><span class="fu">wget</span> https://ftp.gnu.org/gnu/datamash/datamash-1.7.tar.gz</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true"></a><span class="fu">tar</span> xvf datamash-1.7.tar.gz</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true"></a><span class="bu">cd</span> datamash-1.7</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true"></a><span class="ex">./configure</span></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true"></a><span class="fu">make</span></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true"></a><span class="fu">make</span> install</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true"></a><span class="fu">rm</span> -rf datamash-1.7*</span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true"></a></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true"></a><span class="co"># xsv</span></span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true"></a><span class="fu">wget</span> https://github.com/BurntSushi/xsv/releases/download/0.13.0/xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true"></a><span class="fu">tar</span> xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true"></a><span class="fu">mv</span> xsv /usr/local/bin</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true"></a><span class="fu">rm</span> xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true"></a></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true"></a><span class="co"># https://askubuntu.com/questions/919054/how-do-i-run-a-single-command-at-startup-using-systemd</span></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;[Unit]</span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true"></a><span class="st">Description=Local File Browser</span></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true"></a></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true"></a><span class="st">[Service]</span></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true"></a><span class="st">ExecStart=/bin/bash -c &#39;cd /home; /bin/python3 -m http.server 8001&#39;</span></span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true"></a></span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true"></a><span class="st">[Install]</span></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true"></a><span class="st">WantedBy=multi-user.target&quot;</span> <span class="op">&gt;</span> /etc/systemd/system/filebrowser.service</span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true"></a><span class="fu">chmod</span> u+x /etc/systemd/system/filebrowser.service</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true"></a><span class="ex">systemctl</span> enable filebrowser</span></code></pre></div>
 </body>
 </html>
