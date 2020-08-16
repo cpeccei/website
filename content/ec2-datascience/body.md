@@ -45,10 +45,10 @@ Python 3.7 + Pandas + Jupyter
 
 : Python 3.7 is the standard Python version that comes with Amazon Linux 2. I
 write quite a bit of Python code but usually for ETL jobs or shell scripts
-rather than analytical tasks (I prefer R for that purpose). However, I always
+rather than analytical tasks (I prefer R for analysis). However, I always
 install Pandas and Jupyter as they are key tools for data science.
 
-Various Utilities
+Various utilities
 
 : These include the latest versions of [Pandoc](https://pandoc.org/) for
 processing markdown and Rmarkdown, [jq](https://stedolan.github.io/jq/) for
@@ -59,16 +59,22 @@ environment so it can be updated more regularly.
 
 ### How it's built
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The AMI is built using Packer. The
+[intro documentation](https://www.packer.io/intro) for Packer is excellent
+so I recommend starting there. The basic steps are:
+
+1. Spin up a small EC2 instance (e.g. t3.nano) to run the `packer` binary.
+2. Create a `packer.json` template file containing information on
+   how to build the AMI (instance type, source AMI, commands to run, etc.)
+3. Create an `install.sh` script that is referenced in `packer.json`. This
+   install script will download and compile the necessary software.
+4. Run `packer build packer.json`. This spins up a new machine, copies
+   the `install.sh` script over to it, runs the script and installs all the
+   software, then saves the result as an AMI and terminates the build machine.
 
 ### Code
 
-Packer file `datascience.json`
+Template file `packer.json`
 
 ```json
 {

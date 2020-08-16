@@ -104,16 +104,22 @@
 </figure>
 <dl>
 <dt>Python 3.7 + Pandas + Jupyter</dt>
-<dd><p>Python 3.7 is the standard Python version that comes with Amazon Linux 2. I write quite a bit of Python code but usually for ETL jobs or shell scripts rather than analytical tasks (I prefer R for that purpose). However, I always install Pandas and Jupyter as they are key tools for data science.</p>
+<dd><p>Python 3.7 is the standard Python version that comes with Amazon Linux 2. I write quite a bit of Python code but usually for ETL jobs or shell scripts rather than analytical tasks (I prefer R for analysis). However, I always install Pandas and Jupyter as they are key tools for data science.</p>
 </dd>
-<dt>Various Utilities</dt>
+<dt>Various utilities</dt>
 <dd><p>These include the latest versions of <a href="https://pandoc.org/">Pandoc</a> for processing markdown and Rmarkdown, <a href="https://stedolan.github.io/jq/">jq</a> for command-line JSON parsing, and the <a href="https://aws.amazon.com/cli/">AWS CLI</a> for interacting with AWS services. The version of the AWS CLI that comes with Amazon Linux 2 is quite old so I always install the latest version in Python virtual environment so it can be updated more regularly.</p>
 </dd>
 </dl>
 <h3 id="how-its-built">How it’s built</h3>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p>The AMI is built using Packer. The <a href="https://www.packer.io/intro">intro documentation</a> for Packer is excellent so I recommend starting there. The basic steps are:</p>
+<ol type="1">
+<li>Spin up a small EC2 instance (e.g. t3.nano) to run the <code>packer</code> binary.</li>
+<li>Create a <code>packer.json</code> template file containing information on how to build the AMI (instance type, source AMI, commands to run, etc.)</li>
+<li>Create an <code>install.sh</code> script that is referenced in <code>packer.json</code>. This install script will download and compile the necessary software.</li>
+<li>Run <code>packer build packer.json</code>. This spins up a new machine, copies the <code>install.sh</code> script over to it, runs the script and installs all the software, then saves the result as an AMI and terminates the build machine.</li>
+</ol>
 <h3 id="code">Code</h3>
-<p>Packer file <code>datascience.json</code></p>
+<p>Template file <code>packer.json</code></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="dt">&quot;builders&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="fu">{</span></span>
