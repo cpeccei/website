@@ -8,14 +8,15 @@ August 15, 2020
 
 This page outlines the current AMI I use for data science projects on AWS EC2. I
 update this stack every couple of months when new versions of the base software
-are released.
+are released. If any of these instructions aren't clear or don't work for you,
+please let me know (my contact info is on the [homepage](/)).
 
-### What's included and why
+## What's included and why
 
 Amazon Linux 2
 
 : The AMI is built on [Amazon Linux 2](https://aws.amazon.com/amazon-linux-2/)
-which has a good selection of packages and is optimized for EC2. It's mostly
+which has a good selection of packages and is optimized for EC2. It's
 compatible with CentOS / Redhat packages which is helpful for installing
 pre-compiled software like Rstudio Server. You can also add EPEL (see [here for
 instructions](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-enable-epel/))
@@ -36,10 +37,6 @@ Server](https://rstudio.com/products/rstudio/#rstudio-server) to provide a
 browser-based graphical interface to R running on EC2. Although Rstudio Server
 can support multiple users, I use it exclusively in single-user mode and don't
 allow logins from the open internet; instead I just tunnel via ssh on port 8787.
-See the code below for details.
-
-![R running in the browser via Rstudio Server
-(from [Wikipedia](https://en.wikipedia.org/wiki/RStudio))](Rstudio.png)
 
 Python 3.7 + Pandas + Jupyter
 
@@ -54,27 +51,37 @@ Various utilities
 processing markdown and Rmarkdown, [jq](https://stedolan.github.io/jq/) for
 command-line JSON parsing, and the [AWS CLI](https://aws.amazon.com/cli/) for
 interacting with AWS services. The version of the AWS CLI that comes with Amazon
-Linux 2 is quite old so I always install the latest version in Python virtual
+Linux 2 is quite old so I always install the latest version in a Python virtual
 environment so it can be updated more regularly.
 
-### How it's built
+## How it's built
 
 The AMI is built using Packer. The
-[intro documentation](https://www.packer.io/intro) for Packer is excellent
-so I recommend starting there. The basic steps are:
+[intro documentation](https://www.packer.io/intro) for Packer is very thorough
+so I recommend starting there. The tutorial uses `aws_access_key` and
+`aws_secret_key` variables for authentication but I prefer to use
+a custom IAM role instead as it is more secure
+([details here](https://www.packer.io/docs/builders/amazon#iam-task-or-instance-role)).
+
+The basic steps to build the AMI are:
 
 1. Spin up a small EC2 instance (e.g. t3.nano) to run the `packer` binary.
+   Install `packer` on that machine.
 2. Create a `packer.json` template file containing information on
    how to build the AMI (instance type, source AMI, commands to run, etc.)
 3. Create an `install.sh` script that is referenced in `packer.json`. This
    install script will download and compile the necessary software.
-4. Run `packer build packer.json`. This spins up a new machine, copies
+4. Put both `packer.json` and `install.sh` in the same folder as your `packer`
+   binary and run `packer build packer.json`. This spins up a new machine, copies
    the `install.sh` script over to it, runs the script and installs all the
    software, then saves the result as an AMI and terminates the build machine.
 
-### Code
+Here's what I use in my template file `packer.json`. The `source_ami`
+field should be updated to reference to the latest version of the
+"Amazon Linux 2 AMI (HVM), SSD Volume Type" in your region. You can find the
+AMI ID by launching a new instance and looking in the console:
 
-Template file `packer.json`
+![Finding the latest AMI ID](ami_id.png)
 
 ```json
 {
@@ -112,7 +119,7 @@ Template file `packer.json`
 }
 ```
 
-Installation script `install.sh` run by packer to build the AMI.
+And here's the installation script `install.sh` run by packer to build the AMI.
 
 ```bash
 #!/bin/bash
@@ -120,6 +127,7 @@ Installation script `install.sh` run by packer to build the AMI.
 # Update and install packages
 yum update -y
 yum install -y emacs pigz python3 git ImageMagick
+# I use emacs as my editor and add some customizations to its site-start.el
 echo "
 (setq inhibit-splash-screen t)
 (setq make-backup-files nil)
@@ -143,7 +151,9 @@ curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 \
     -o /usr/local/bin/jq
 chmod a+rx /usr/local/bin/jq
 
-# Install texlive
+# Install texlive. This is optional but will let you build pdfs from rmarkdown
+# via latex which is a nice feature. A full texlive install takes 5GB+
+# so I created a custom installation profile that only takes about 300MB
 yum install -y perl-Digest-MD5
 wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar xvf install-tl-unx.tar.gz
@@ -192,6 +202,7 @@ tlpdbopt_w32_multi_user 1
 cd /tmp
 rm -rf install-tl-*
 
+# You can update this to the latest pandoc release as it becomes available
 wget https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz
 tar xvzf pandoc-2.9.2.1-linux-amd64.tar.gz --strip-components 1 -C /usr/local
 rm -rf pandoc-2.9.2*
@@ -215,6 +226,8 @@ rm -rf R-3.6.3*
 # Install tidyverse
 yum install -y libxml2-devel openssl-devel
 echo 'options(repos = c(CRAN="https://cran.r-project.org/"))' >> /usr/local/lib64/R/etc/Rprofile.site
+# Note the use of Ncpus = 4L. Since my packer build machine is a c5.xlarge
+# it has 4 cpus so we'll use all of them to speed up compilation times.
 /usr/local/bin/R -e 'install.packages(c("tidyverse"), Ncpus = 4L)'
 
 # Add rstudio
@@ -225,17 +238,18 @@ rm -f rstudio-server-rhel-1.3.959-x86_64.rpm
 # Will serve on port 8787 by default
 echo www-address=127.0.0.1 >> /etc/rstudio/rserver.conf
 echo rsession-which-r=/usr/local/bin/R >> /etc/rstudio/rserver.conf
-# Add password for ec2-user using passwd ec2-user then do
-# rstudio-server restart
 
 # Other useful R packages
 /usr/local/bin/R -e 'install.packages(c("corrplot", "plotly", "data.table", "slider"), Ncpus = 4L)'
 
-# Parallel (installs into /usr/local/bin)
+# GNU Parallel (installs into /usr/local/bin). This is an awesome tool that
+# lets you easily run commands across multiple CPUs.
+# See https://www.gnu.org/software/parallel/
 curl pi.dk/3/ | bash
 rm -rf parallel-*
 
-# Datamash
+# GNU datamash. https://www.gnu.org/software/datamash/
+# A command line tool for quick operations on text files.
 yum install -y perl-Digest-SHA perl-Data-Dumper
 wget https://ftp.gnu.org/gnu/datamash/datamash-1.7.tar.gz
 tar xvf datamash-1.7.tar.gz
@@ -246,21 +260,33 @@ make install
 cd /tmp
 rm -rf datamash-1.7*
 
-# xsv
+# xsv. https://github.com/BurntSushi/xsv
+# A command line program for manipulating CSV files.
 wget https://github.com/BurntSushi/xsv/releases/download/0.13.0/xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
 tar xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
 mv xsv /usr/local/bin
 rm xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
-
-# https://askubuntu.com/questions/919054/how-do-i-run-a-single-command-at-startup-using-systemd
-echo "[Unit]
-Description=Local File Browser
-
-[Service]
-ExecStart=/bin/bash -c 'cd /home; /bin/python3 -m http.server 8001'
-
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/filebrowser.service
-chmod u+x /etc/systemd/system/filebrowser.service
-systemctl enable filebrowser
 ```
+
+## Using the AMI
+
+Start up a machine using your new AMI and connect to it from your Mac
+or Windows computer using:
+
+```
+ssh -i <keyfile> -L 8787:localhost:8787 -L 8888:localhost:8888 ec2-user@<ip address>
+```
+
+Those two `-L` commands tunnel ports 8787 (for Rstudio Server) and
+8888 (for Jupyter) from the EC2 machine to your local computer. Once you
+are connected via ssh you can visit `localhost:8787` to log into Rstudio.
+Note that you will have to have set a password for the ec2-user to log in. To
+do that, on your EC2 machine do:
+
+```
+sudo passwd ec2-user
+sudo rstudio-server restart
+```
+
+
+
