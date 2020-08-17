@@ -12,67 +12,6 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {  background-color: #f8f8f8; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ef2929; } /* Alert */
-    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #c4a000; } /* Attribute */
-    code span.bn { color: #0000cf; } /* BaseN */
-    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4e9a06; } /* Char */
-    code span.cn { color: #000000; } /* Constant */
-    code span.co { color: #8f5902; font-style: italic; } /* Comment */
-    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-    code span.dt { color: #204a87; } /* DataType */
-    code span.dv { color: #0000cf; } /* DecVal */
-    code span.er { color: #a40000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #0000cf; } /* Float */
-    code span.fu { color: #000000; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-    code span.ot { color: #8f5902; } /* Other */
-    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-    code span.sc { color: #000000; } /* SpecialChar */
-    code span.ss { color: #4e9a06; } /* SpecialString */
-    code span.st { color: #4e9a06; } /* String */
-    code span.va { color: #000000; } /* Variable */
-    code span.vs { color: #4e9a06; } /* VerbatimString */
-    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="/base.css" />
@@ -92,42 +31,42 @@
 </figure>
 <p>To see a real-time implementation of this you can take a look at my <a href="http://demonstrations.wolfram.com/Doublets/">Mathematica Doublets Demonstration</a>. This article goes into a bit more depth on how the demonstration was created. All the code is written for Mathematica 6.0.</p>
 <p>First, let’s get a list of all lowercase 5-letter words.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">d</span> = <span class="fu">DictionaryLookup</span>[<span class="fu">RegularExpression</span>[&quot;[a-z]{<span class="dv">1</span>,<span class="dv">5</span>}&quot;]];</span></code></pre></div>
+<pre class="mathematica"><code>d = DictionaryLookup[RegularExpression[&quot;[a-z]{1,5}&quot;]];</code></pre>
 <p>It’s pretty big!</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">Length</span>[<span class="fu">d</span>]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="dv">8508</span></span></code></pre></div>
+<pre class="mathematica"><code>Length[d]
+8508</code></pre>
 <p>We’ll just take the first 1000 words for purposes of this example.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">d</span> = <span class="fu">Take</span>[<span class="fu">d</span>, <span class="dv">1000</span>];</span></code></pre></div>
+<pre class="mathematica"><code>d = Take[d, 1000];</code></pre>
 <p>Now we want to build up a graph <strong>g</strong> that shows which words are “connected” to each other i.e. have EditDistance == 1. This code is computationally intensive and takes about 20 minutes to run. Notice I have added a quick check at the beginning to skip out if the words differ in length by more than 1, since there is no way these two words could be connected in that case. I would welcome any way to optimize this code!</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">g</span> = {};</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="fu">Do</span>[</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a> <span class="fu">Do</span>[</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>  <span class="fu">If</span>[<span class="fu">Abs</span>[<span class="fu">StringLength</span>[<span class="fu">d</span>[[<span class="fu">i</span>]]] - <span class="fu">StringLength</span>[<span class="fu">d</span>[[<span class="fu">j</span>]]]] &gt; <span class="dv">1</span>, <span class="fu">Continue</span>[]];</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>  <span class="fu">If</span>[<span class="fu">EditDistance</span>[<span class="fu">d</span>[[<span class="fu">i</span>]], <span class="fu">d</span>[[<span class="fu">j</span>]]] == <span class="dv">1</span>, <span class="fu">AppendTo</span>[<span class="fu">g</span>, <span class="fu">d</span>[[<span class="fu">i</span>]] -&gt; <span class="fu">d</span>[[<span class="fu">j</span>]]];</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="fu">AppendTo</span>[<span class="fu">g</span>, <span class="fu">d</span>[[<span class="fu">j</span>]] -&gt; <span class="fu">d</span>[[<span class="fu">i</span>]]]],</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>  {<span class="fu">j</span>, <span class="fu">i</span> + <span class="dv">1</span>, <span class="fu">Length</span>[<span class="fu">d</span>]}],</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a> {<span class="fu">i</span>, <span class="dv">1</span>, <span class="fu">Length</span>[<span class="fu">d</span>]}]</span></code></pre></div>
+<pre class="mathematica"><code>g = {};
+Do[
+ Do[
+  If[Abs[StringLength[d[[i]]] - StringLength[d[[j]]]] &gt; 1, Continue[]];
+  If[EditDistance[d[[i]], d[[j]]] == 1, AppendTo[g, d[[i]] -&gt; d[[j]]];
+    AppendTo[g, d[[j]] -&gt; d[[i]]]],
+  {j, i + 1, Length[d]}],
+ {i, 1, Length[d]}]</code></pre>
 <p>Let’s plot the graph to see which words are connected.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">GraphPlot</span>[<span class="fu">g</span>]</span></code></pre></div>
+<pre class="mathematica"><code>GraphPlot[g]</code></pre>
 <figure>
 <img src="full_graph.png" alt="" /><figcaption>Full Graph</figcaption>
 </figure>
 <p>There are quite a few little groups of words which are only connected to each other. We want to get rid of those and just keep the big cluster. The next step uses StrongComponents to automatically identify the biggest cluster and keep only that subset of the graph.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="fu">Needs</span>[&quot;GraphUtilities`&quot;]</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="fu">s</span> = StrongComponents[<span class="fu">g</span>];</span></code></pre></div>
+<pre class="mathematica"><code>Needs[&quot;GraphUtilities`&quot;]
+
+s = StrongComponents[g];</code></pre>
 <p>We’ll sort the connected components by number of member words, and take the largest component (i.e. the big cluster in the picture above).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>sc = <span class="fu">Last</span>[<span class="fu">SortBy</span>[<span class="fu">s</span>, <span class="fu">Length</span>]];</span></code></pre></div>
+<pre class="mathematica"><code>sc = Last[SortBy[s, Length]];</code></pre>
 <p>Filter graph <strong>g</strong> to only include words which appear in <strong>gc</strong>, the biggest cluster.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>gc = <span class="fu">Select</span>[<span class="fu">g</span>, <span class="fu">MemberQ</span>[sc, #[[<span class="dv">1</span>]]] &amp;];</span></code></pre></div>
+<pre class="mathematica"><code>gc = Select[g, MemberQ[sc, #[[1]]] &amp;];</code></pre>
 <p>Confirm that we have correctly filtered and are left with a big group of words where you can go from any word to any other by just changing one letter (i.e. EditDistance == 1).</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="fu">GraphPlot</span>[gc]</span></code></pre></div>
+<pre class="mathematica"><code>GraphPlot[gc]</code></pre>
 <figure>
 <img src="filtered_graph.png" alt="" /><figcaption>Filtered Graph</figcaption>
 </figure>
 <p>Let’s test that we can solve a doublet using the shortest-path algorithm built into Mathematica. We’ll find the shortest distance between the vertices “sleep” and “dream” in the graph <strong>gc</strong>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode mathematica"><code class="sourceCode mathematica"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>GraphPath[gc, &quot;sleep&quot;, &quot;dream&quot;]</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>{&quot;sleep&quot;, &quot;seep&quot;, &quot;seem&quot;, &quot;seam&quot;, &quot;ream&quot;, &quot;dream&quot;}</span></code></pre></div>
+<pre class="mathematica"><code>GraphPath[gc, &quot;sleep&quot;, &quot;dream&quot;]
+
+{&quot;sleep&quot;, &quot;seep&quot;, &quot;seem&quot;, &quot;seam&quot;, &quot;ream&quot;, &quot;dream&quot;}</code></pre>
 </body>
 </html>

@@ -29,17 +29,21 @@ td, th {
 }
 
 th {
-    background: #F3F3F3; /* Light grey background */
+    background-color: #F3F3F3; /* Light grey background */
     font-weight: bold; /* Make sure they're bold */
 }
 
 blockquote {
     margin-left: 0px;
     padding-left: 5px;
-    border-left: 3px solid #EEE;
+    border-left: 3px solid #F3F3F3;
 }
 
-p > code {
-    background: #F3F3F3;
-    padding: 3px 5px 3px 5px;
+code {
+    background-color: #F3F3F3;
+}
+
+pre {
+    background-color: #F3F3F3;
+    padding: 10px;
 }

@@ -8,7 +8,7 @@ build () {
   else
       css=/base.css
   fi
-  pandoc -s -o "$cur_dir/index.html" --highlight-style tango --css "$css" "$1"
+  pandoc -s -o "$cur_dir/index.html" --no-highlight --css "$css" "$1"
 }
 
 build content/body.md
