@@ -12,7 +12,6 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="/base.css" />
   <!--[if lt IE 9]>
@@ -234,12 +233,37 @@ rm -rf datamash-1.7*
 wget https://github.com/BurntSushi/xsv/releases/download/0.13.0/xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
 tar xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
 mv xsv /usr/local/bin
-rm xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz</code></pre>
+rm xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
+
+# Add a recent version of the AWS CLI into its own virtual environment
+python3 -m venv /opt/ve_awscli
+# It&#39;s always useful to upgrade to the latest pip before installing
+# any other packages
+/opt/ve_awscli/bin/pip install --upgrade pip
+/opt/ve_awscli/bin/pip install awscli
+# The Amazon Linux 2 AMI comes with an old version of the AWS CLI
+# which is on the the ec2-user&#39;s path at /usr/bin/aws.
+# We&#39;ll put a symlink to our newly installed version of the AWS CLI
+# into /usr/local/bin which is first in the $PATH variable and thus
+# will give it precedence when run you run &quot;aws&quot; as the ec2-user.
+# Note that when you run &quot;aws&quot; as the root user you will still run the
+# old, system-installed version of the CLI since /usr/local/bin is not
+# on the root&#39;s path
+ln -s /opt/ve_awscli/bin/aws /usr/local/bin
+</code></pre>
 <h2 id="using-the-ami">Using the AMI</h2>
 <p>Start up a machine using your new AMI and connect to it from your Mac or Windows computer using:</p>
 <pre><code>ssh -i &lt;keyfile&gt; -L 8787:localhost:8787 -L 8888:localhost:8888 ec2-user@&lt;ip address&gt;</code></pre>
 <p>Those two <code>-L</code> commands tunnel ports 8787 (for Rstudio Server) and 8888 (for Jupyter) from the EC2 machine to your local computer. Once you are connected via ssh you can visit <code>localhost:8787</code> to log into Rstudio. Note that you will have to have set a password for the ec2-user to log in. To do that, on your EC2 machine do:</p>
 <pre><code>sudo passwd ec2-user
 sudo rstudio-server restart</code></pre>
+<p>When I want to run jupyter I always just install the latest version into a virtual environment in my home folder as the ec2-user.</p>
+<pre><code>python3 -m venv /home/ec2-user/ve_jupyter
+/home/ec2-user/ve_jupyter/bin/pip install --upgrade pip
+/home/ec2-user/ve_jupyter/bin/pip install jupyter pandas jupyter seaborn</code></pre>
+<p>The you can start jupyter on your EC2 machine using:</p>
+<pre><code>~/ve_jupyter/bin/jupyter notebook</code></pre>
+<p>And since you are tunneling port 8888 in your ssh session you can connect to jupyter in your browser by visiting the url that jupyter prints, which looks like:</p>
+<pre><code>http://localhost:8888/?token=XXXXXXXXXXXXXXXXXX</code></pre>
 </body>
 </html>

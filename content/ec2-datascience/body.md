@@ -266,6 +266,23 @@ wget https://github.com/BurntSushi/xsv/releases/download/0.13.0/xsv-0.13.0-x86_6
 tar xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
 mv xsv /usr/local/bin
 rm xvf xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz
+
+# Add a recent version of the AWS CLI into its own virtual environment
+python3 -m venv /opt/ve_awscli
+# It's always useful to upgrade to the latest pip before installing
+# any other packages
+/opt/ve_awscli/bin/pip install --upgrade pip
+/opt/ve_awscli/bin/pip install awscli
+# The Amazon Linux 2 AMI comes with an old version of the AWS CLI
+# which is on the the ec2-user's path at /usr/bin/aws.
+# We'll put a symlink to our newly installed version of the AWS CLI
+# into /usr/local/bin which is first in the $PATH variable and thus
+# will give it precedence when run you run "aws" as the ec2-user.
+# Note that when you run "aws" as the root user you will still run the
+# old, system-installed version of the CLI since /usr/local/bin is not
+# on the root's path
+ln -s /opt/ve_awscli/bin/aws /usr/local/bin
+
 ```
 
 ## Using the AMI
@@ -287,6 +304,36 @@ do that, on your EC2 machine do:
 sudo passwd ec2-user
 sudo rstudio-server restart
 ```
+
+When I want to run jupyter I always just install the latest version into a
+virtual environment in my home folder as the ec2-user.
+
+```
+python3 -m venv /home/ec2-user/ve_jupyter
+/home/ec2-user/ve_jupyter/bin/pip install --upgrade pip
+/home/ec2-user/ve_jupyter/bin/pip install jupyter pandas jupyter seaborn
+```
+
+The you can start jupyter on your EC2 machine using:
+
+```
+~/ve_jupyter/bin/jupyter notebook
+```
+
+And since you are tunneling port 8888 in your ssh session you can connect
+to jupyter in your browser by visiting the url that jupyter prints, which
+looks like:
+
+```
+http://localhost:8888/?token=XXXXXXXXXXXXXXXXXX
+````
+
+
+
+
+
+
+
 
 
 
