@@ -103,14 +103,6 @@ echo &quot;
 (electric-indent-mode -1)
 &quot; &gt;&gt; /usr/share/emacs/site-lisp/site-start.el
 
-# In Fedora /usr/local/bin/ isn&#39;t in the standard path. It is
-# added by the login program (see man login), which doesn&#39;t run
-# when calling a bash script from cron. For simplicity, add it to
-# path for all users.
-echo &#39;export PATH=&quot;/usr/local/bin/:$PATH&quot;&#39; &gt;&gt; /etc/profile.d/custom.sh
-# Source the file to pick up these changes for the rest of the script
-. /etc/profile.d/custom.sh
-
 # To hold installation files
 cd /tmp
 
@@ -260,7 +252,7 @@ sudo rstudio-server restart</code></pre>
 <p>When I want to run jupyter I always just install the latest version into a virtual environment in my home folder as the ec2-user.</p>
 <pre><code>python3 -m venv /home/ec2-user/ve_jupyter
 /home/ec2-user/ve_jupyter/bin/pip install --upgrade pip
-/home/ec2-user/ve_jupyter/bin/pip install jupyter pandas jupyter seaborn</code></pre>
+/home/ec2-user/ve_jupyter/bin/pip install jupyter pandas seaborn</code></pre>
 <p>The you can start jupyter on your EC2 machine using:</p>
 <pre><code>~/ve_jupyter/bin/jupyter notebook</code></pre>
 <p>And since you are tunneling port 8888 in your ssh session you can connect to jupyter in your browser by visiting the url that jupyter prints, which looks like:</p>

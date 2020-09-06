@@ -135,14 +135,6 @@ echo "
 (electric-indent-mode -1)
 " >> /usr/share/emacs/site-lisp/site-start.el
 
-# In Fedora /usr/local/bin/ isn't in the standard path. It is
-# added by the login program (see man login), which doesn't run
-# when calling a bash script from cron. For simplicity, add it to
-# path for all users.
-echo 'export PATH="/usr/local/bin/:$PATH"' >> /etc/profile.d/custom.sh
-# Source the file to pick up these changes for the rest of the script
-. /etc/profile.d/custom.sh
-
 # To hold installation files
 cd /tmp
 
@@ -311,7 +303,7 @@ virtual environment in my home folder as the ec2-user.
 ```
 python3 -m venv /home/ec2-user/ve_jupyter
 /home/ec2-user/ve_jupyter/bin/pip install --upgrade pip
-/home/ec2-user/ve_jupyter/bin/pip install jupyter pandas jupyter seaborn
+/home/ec2-user/ve_jupyter/bin/pip install jupyter pandas seaborn
 ```
 
 The you can start jupyter on your EC2 machine using:
