@@ -1,0 +1,12 @@
+img {
+  margin-right: 15px;
+  float: left;
+}
+
+.wrong {
+  color: #aa0000;
+}
+
+.correct {
+  color: #00aa00;
+}

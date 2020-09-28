@@ -47,3 +47,18 @@ pre {
     background-color: #F3F3F3;
     padding: 10px;
 }
+
+.paragraph-grid {
+  display: grid;
+  grid-template-columns: 60px auto;
+  align-items: center;
+}
+
+.icon-light {
+  width: 40px;
+  filter:contrast(70%);
+}
+
+
+
+
