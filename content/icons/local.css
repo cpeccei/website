@@ -1,0 +1,10 @@
+div p {
+  display: grid;
+  grid-template-columns: 60px auto;
+  align-items: center;
+}
+
+div img {
+  width: 40px;
+  filter:contrast(70%);
+}
