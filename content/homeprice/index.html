@@ -402,64 +402,64 @@ as triggers for the tooltips over each word.</li>
 
 <h3>1_compile_data.py</h3>
 
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 150%"><span style="color: #008000"># Import modules</span>
-<span style="color: #008000"># ==============</span>
+<pre><code># Import modules
+# ==============
 
-<span style="color: #008000"># Standard library modules (tested on Python 2.6 under Windows 7)</span>
-<span style="color: #0000ff">import</span> csv
-<span style="color: #0000ff">import</span> cookielib
-<span style="color: #0000ff">import</span> urllib2
-<span style="color: #0000ff">import</span> re
+# Standard library modules (tested on Python 2.6 under Windows 7)
+import csv
+import cookielib
+import urllib2
+import re
 
-<span style="color: #008000"># Beautifulsoup for webscraping (http://www.crummy.com/software/BeautifulSoup/)</span>
-<span style="color: #0000ff">import</span> BeautifulSoup
+# Beautifulsoup for webscraping (http://www.crummy.com/software/BeautifulSoup/)
+import BeautifulSoup
 
-<span style="color: #008000"># Define some constants</span>
-<span style="color: #008000"># =====================</span>
+# Define some constants
+# =====================
 
-<span style="color: #008000"># Inputs:</span>
-<span style="color: #008000"># - A CSV file downloaded from Redfin</span>
-<span style="color: #008000"># - Cookie file exported from Firefox allowing login to Redfin</span>
-<span style="color: #008000">#</span>
-<span style="color: #008000"># Outputs:</span>
-<span style="color: #008000"># - A CSV file containing coded features about a property plus the html</span>
-<span style="color: #008000">#   description from the Redfin page</span>
+# Inputs:
+# - A CSV file downloaded from Redfin
+# - Cookie file exported from Firefox allowing login to Redfin
+#
+# Outputs:
+# - A CSV file containing coded features about a property plus the html
+#   description from the Redfin page
 
-REDFIN_CSV_FILE = <span style="color: #a31515">&#39;../data/redfin_data.csv&#39;</span>
-COOKIE_FILE = <span style="color: #a31515">&#39;../data/cookies.txt&#39;</span>
-OUTPUT_CSV_FILE = <span style="color: #a31515">&#39;../data/features.csv&#39;</span>
+REDFIN_CSV_FILE = &#39;../data/redfin_data.csv&#39;
+COOKIE_FILE = &#39;../data/cookies.txt&#39;
+OUTPUT_CSV_FILE = &#39;../data/features.csv&#39;
 
-<span style="color: #008000"># Main script starts here</span>
-<span style="color: #008000"># =======================</span>
+# Main script starts here
+# =======================
 
-<span style="color: #008000"># Set up cookies so that we can access Redfin pages through urrllib2</span>
+# Set up cookies so that we can access Redfin pages through urrllib2
 cj = cookielib.MozillaCookieJar()
 cj.load(COOKIE_FILE)
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 urllib2.install_opener(opener)
 
-<span style="color: #008000"># Create input and output CSV files</span>
-input_csv = csv.reader(open(REDFIN_CSV_FILE, <span style="color: #a31515">&#39;rb&#39;</span>))
-output_csv = csv.writer(open(OUTPUT_CSV_FILE, <span style="color: #a31515">&#39;wb&#39;</span>))
-header = [<span style="color: #a31515">&#39;sq_ft&#39;</span>,
-          <span style="color: #a31515">&#39;lot_size&#39;</span>,
-          <span style="color: #a31515">&#39;beds&#39;</span>,
-          <span style="color: #a31515">&#39;baths&#39;</span>,
-          <span style="color: #a31515">&#39;yr_built&#39;</span>,
-          <span style="color: #a31515">&#39;original_listprice&#39;</span>,
-          <span style="color: #a31515">&#39;parking_spots&#39;</span>,
-          <span style="color: #a31515">&#39;url&#39;</span>,
-          <span style="color: #a31515">&#39;sale_price&#39;</span>,
-          <span style="color: #a31515">&#39;description&#39;</span>]
+# Create input and output CSV files
+input_csv = csv.reader(open(REDFIN_CSV_FILE, &#39;rb&#39;))
+output_csv = csv.writer(open(OUTPUT_CSV_FILE, &#39;wb&#39;))
+header = [&#39;sq_ft&#39;,
+          &#39;lot_size&#39;,
+          &#39;beds&#39;,
+          &#39;baths&#39;,
+          &#39;yr_built&#39;,
+          &#39;original_listprice&#39;,
+          &#39;parking_spots&#39;,
+          &#39;url&#39;,
+          &#39;sale_price&#39;,
+          &#39;description&#39;]
 output_csv.writerow(header)
 
-<span style="color: #008000"># Loop over rows in input CSV (downloaded from Redfin) that contain</span>
-<span style="color: #008000"># data on each home.</span>
+# Loop over rows in input CSV (downloaded from Redfin) that contain
+# data on each home.
 input_csv.next()
-<span style="color: #0000ff">for</span> row <span style="color: #0000ff">in</span> input_csv:
+for row in input_csv:
 
-    <span style="color: #008000"># Select some potentially useful variables from the CSV</span>
-    <span style="color: #008000"># that we will want to include in our output file</span>
+    # Select some potentially useful variables from the CSV
+    # that we will want to include in our output file
     sq_ft = row[10]
     lot_size = row[11]
     beds = row[7]
@@ -469,26 +469,26 @@ input_csv.next()
     parking_spots = row[13]
     url = row[23]
 
-    <span style="color: #008000"># The url field contains a link to the home&#39;s MLS page with</span>
-    <span style="color: #008000"># realtor description and sale history</span>
+    # The url field contains a link to the home&#39;s MLS page with
+    # realtor description and sale history
     req = urllib2.Request(url)
     handle = urllib2.urlopen(req)
 
-    <span style="color: #008000"># Use Beautiful soup to scrape the text of the property</span>
-    <span style="color: #008000"># description and also the final sale price</span>
+    # Use Beautiful soup to scrape the text of the property
+    # description and also the final sale price
     html = handle.read()
     soup = BeautifulSoup.BeautifulSoup(html)
-    <span style="color: #0000ff">try</span>:
-        description = soup.find(<span style="color: #a31515">&#39;div&#39;</span>, id=<span style="color: #a31515">&#39;property_description&#39;</span>).text
-    <span style="color: #0000ff">except</span> AttributeError:
-        description = <span style="color: #a31515">&#39;&#39;</span>
-    <span style="color: #0000ff">try</span>:
-        sale_price = soup.find(<span style="color: #a31515">&#39;div&#39;</span>, attrs={<span style="color: #a31515">&#39;class&#39;</span>: <span style="color: #a31515">&#39;price&#39;</span>}).text
-        sale_price = re.sub(<span style="color: #a31515">&#39;[^0-9]&#39;</span>, <span style="color: #a31515">&#39;&#39;</span>, sale_price)
-    <span style="color: #0000ff">except</span> AttributeError:
-        sale_price = <span style="color: #a31515">&#39;&#39;</span>
+    try:
+        description = soup.find(&#39;div&#39;, id=&#39;property_description&#39;).text
+    except AttributeError:
+        description = &#39;&#39;
+    try:
+        sale_price = soup.find(&#39;div&#39;, attrs={&#39;class&#39;: &#39;price&#39;}).text
+        sale_price = re.sub(&#39;[^0-9]&#39;, &#39;&#39;, sale_price)
+    except AttributeError:
+        sale_price = &#39;&#39;
 
-    <span style="color: #008000"># Create row of final output data</span>
+    # Create row of final output data
     data = [sq_ft,
             lot_size,
             beds,
@@ -499,52 +499,52 @@ input_csv.next()
             url,
             sale_price,
             description]
-    <span style="color: #0000ff">print</span> url, description
+    print url, description
     output_csv.writerow(data)
-</pre></div>
+</code></pre>
 
 
 <h3>2_create_visualization.py</h3>
 
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 150%"><span style="color: #008000"># Import modules</span>
-<span style="color: #008000"># ==============</span>
+<pre><code># Import modules
+# ==============
 
-<span style="color: #0000ff">import</span> random
-<span style="color: #0000ff">import</span> csv
-<span style="color: #0000ff">import</span> re
+import random
+import csv
+import re
 
-<span style="color: #008000"># Define some constants</span>
-<span style="color: #008000"># =====================</span>
+# Define some constants
+# =====================
 
-FEATURES_CSV_FILE = <span style="color: #a31515">&#39;../data/features.csv&#39;</span>
+FEATURES_CSV_FILE = &#39;../data/features.csv&#39;
 CONCORDANCE_WIDTH = 8
-OUTPUT_HTML_FILE = <span style="color: #a31515">&#39;../output/visualization.html&#39;</span>
+OUTPUT_HTML_FILE = &#39;../output/visualization.html&#39;
 
-<span style="color: #008000"># Some basic stats functions</span>
-<span style="color: #008000"># ==========================</span>
+# Some basic stats functions
+# ==========================
 
-<span style="color: #0000ff">def</span> mean(x):
-    <span style="color: #0000ff">return</span> sum(x) / len(x)
+def mean(x):
+    return sum(x) / len(x)
 
-<span style="color: #0000ff">def</span> stdev(x):
+def stdev(x):
     m = mean(x)
-    <span style="color: #0000ff">return</span> mean([(p - m)**2 <span style="color: #0000ff">for</span> p <span style="color: #0000ff">in</span> x])**0.5
+    return mean([(p - m)**2 for p in x])**0.5
 
-<span style="color: #0000ff">def</span> sterr(x):
-    <span style="color: #0000ff">return</span> stdev(x) / len(x)**0.5
+def sterr(x):
+    return stdev(x) / len(x)**0.5
 
-<span style="color: #008000"># Main script starts here</span>
-<span style="color: #008000"># =======================</span>
+# Main script starts here
+# =======================
 
-<span style="color: #008000"># First step is to read in the CSV file produced by the script</span>
-<span style="color: #008000"># 1_compile_data.py. We will build up a dictionary called word_data</span>
-<span style="color: #008000"># that contains all the  information for each word needed to create</span>
-<span style="color: #008000"># the final visualization.</span>
+# First step is to read in the CSV file produced by the script
+# 1_compile_data.py. We will build up a dictionary called word_data
+# that contains all the  information for each word needed to create
+# the final visualization.
 word_data = {}
-input_csv = csv.reader(open(FEATURES_CSV_FILE, <span style="color: #a31515">&#39;rb&#39;</span>))
-<span style="color: #008000"># Skip header line</span>
+input_csv = csv.reader(open(FEATURES_CSV_FILE, &#39;rb&#39;))
+# Skip header line
 input_csv.next()
-<span style="color: #0000ff">for</span> row <span style="color: #0000ff">in</span> input_csv:
+for row in input_csv:
     (sq_ft,
      lot_size,
      beds,
@@ -555,129 +555,129 @@ input_csv.next()
      url,
      sale_price,
      description) = row
-    <span style="color: #008000"># Compute the variable &#39;pct&#39;, the percentage over the original list</span>
-    <span style="color: #008000"># price at which a house eventually sold. This will be the y-axis</span>
-    <span style="color: #008000"># of the final plot.</span>
-    <span style="color: #008000"># Sometimes the sale price or original list price will be missing</span>
-    <span style="color: #008000"># in the data so we use a try statement to skip over these records.</span>
-    <span style="color: #0000ff">try</span>:
+    # Compute the variable &#39;pct&#39;, the percentage over the original list
+    # price at which a house eventually sold. This will be the y-axis
+    # of the final plot.
+    # Sometimes the sale price or original list price will be missing
+    # in the data so we use a try statement to skip over these records.
+    try:
         pct = (float(sale_price) / float(original_listprice) - 1) * 100
-    <span style="color: #0000ff">except</span> ValueError:
-        <span style="color: #0000ff">continue</span>
-    <span style="color: #008000"># A data cleaning step: if the percentage increase/decrease is very</span>
-    <span style="color: #008000"># large or small there is probably something strange going on. For</span>
-    <span style="color: #008000"># example, the home sale might not have been an &quot;at arm&#39;s length&quot;</span>
-    <span style="color: #008000"># transaction (e.g. a parent sold to their child for a big discount).</span>
-    <span style="color: #008000"># We&#39;ll skip these records.</span>
-    <span style="color: #0000ff">if</span> abs(pct) &gt; 20:
-        <span style="color: #0000ff">continue</span>
-    <span style="color: #008000"># Use the text from the home description to create concordances</span>
-    <span style="color: #008000"># for each word. A concordance is a snippet of text surrrounding</span>
-    <span style="color: #008000"># a given word that provides the user with some context. It will</span>
-    <span style="color: #008000"># appear in the tooltips in the final visualization.</span>
-    <span style="color: #008000">#</span>
-    <span style="color: #008000"># Strip any HTML tags from the home description</span>
-    description = <span style="color: #a31515">&#39; &#39;</span> + re.sub(<span style="color: #a31515">&#39;&lt;.*?&gt;&#39;</span>, <span style="color: #a31515">&#39; &#39;</span>, description) + <span style="color: #a31515">&#39; &#39;</span>
-    <span style="color: #008000"># Split the text into alternating tokens of non-word, word, non-word, etc</span>
-    tokens = re.split(<span style="color: #a31515">&#39;([^A-Za-z]+)&#39;</span>, description)
-    <span style="color: #008000"># Build the concordances for each word. Note that we are going to add</span>
-    <span style="color: #008000"># some HTML tags to the concordances so they will display nicely</span>
-    <span style="color: #008000"># in the tooltips.</span>
+    except ValueError:
+        continue
+    # A data cleaning step: if the percentage increase/decrease is very
+    # large or small there is probably something strange going on. For
+    # example, the home sale might not have been an &quot;at arm&#39;s length&quot;
+    # transaction (e.g. a parent sold to their child for a big discount).
+    # We&#39;ll skip these records.
+    if abs(pct) &gt; 20:
+        continue
+    # Use the text from the home description to create concordances
+    # for each word. A concordance is a snippet of text surrrounding
+    # a given word that provides the user with some context. It will
+    # appear in the tooltips in the final visualization.
+    #
+    # Strip any HTML tags from the home description
+    description = &#39; &#39; + re.sub(&#39;&lt;.*?&gt;&#39;, &#39; &#39;, description) + &#39; &#39;
+    # Split the text into alternating tokens of non-word, word, non-word, etc
+    tokens = re.split(&#39;([^A-Za-z]+)&#39;, description)
+    # Build the concordances for each word. Note that we are going to add
+    # some HTML tags to the concordances so they will display nicely
+    # in the tooltips.
     words = set()
-    <span style="color: #0000ff">for</span> i <span style="color: #0000ff">in</span> range(2, len(tokens) - 2, 2):
+    for i in range(2, len(tokens) - 2, 2):
         word = tokens[i].lower()
         words.add(word)
         i_start = max(i - CONCORDANCE_WIDTH, 0)
         i_end = i + CONCORDANCE_WIDTH
-        <span style="color: #008000"># We will wrap the focus word of this concordance in a highlight</span>
-        <span style="color: #008000"># tag so we can make it stand out in the tooltip.</span>
-        concordance = <span style="color: #a31515">&#39;... &#39;</span> + <span style="color: #a31515">&#39;&#39;</span>.join(tokens[i_start:i] +
-            [<span style="color: #a31515">&quot;&lt;span class=&#39;word&#39;&gt;&quot;</span> + tokens[i] + <span style="color: #a31515">&#39;&lt;/span&gt;&#39;</span>] +
-            tokens[i + 1:i_end]) + <span style="color: #a31515">&#39; ...&lt;br /&gt;&#39;</span>
-        <span style="color: #0000ff">if</span> word <span style="color: #0000ff">not</span> <span style="color: #0000ff">in</span> word_data:
-            word_data[word] = {<span style="color: #a31515">&#39;concordances&#39;</span>: [], <span style="color: #a31515">&#39;pct&#39;</span>: []}
-        word_data[word][<span style="color: #a31515">&#39;concordances&#39;</span>].append(concordance)
-    <span style="color: #008000"># Now that we know all the words that appeared in this description,</span>
-    <span style="color: #008000"># we store the pct value in a list for each of the words. In the next</span>
-    <span style="color: #008000"># step we will compute the mean pct for each word.</span>
-    <span style="color: #0000ff">for</span> word <span style="color: #0000ff">in</span> words:
-        word_data[word][<span style="color: #a31515">&#39;pct&#39;</span>].append(pct)
+        # We will wrap the focus word of this concordance in a highlight
+        # tag so we can make it stand out in the tooltip.
+        concordance = &#39;... &#39; + &#39;&#39;.join(tokens[i_start:i] +
+            [&quot;&lt;span class=&#39;word&#39;&gt;&quot; + tokens[i] + &#39;&lt;/span&gt;&#39;] +
+            tokens[i + 1:i_end]) + &#39; ...&lt;br /&gt;&#39;
+        if word not in word_data:
+            word_data[word] = {&#39;concordances&#39;: [], &#39;pct&#39;: []}
+        word_data[word][&#39;concordances&#39;].append(concordance)
+    # Now that we know all the words that appeared in this description,
+    # we store the pct value in a list for each of the words. In the next
+    # step we will compute the mean pct for each word.
+    for word in words:
+        word_data[word][&#39;pct&#39;].append(pct)
 
-<span style="color: #008000"># Compute the mean pct increase/decrease for all homes with</span>
-<span style="color: #008000"># a given word in their description. Also compute number of home</span>
-<span style="color: #008000"># descriptions containing that word. Finally, compute the standard error</span>
-<span style="color: #008000"># of the mean so that we can only include words with a &quot;reliable&quot; estimate</span>
-<span style="color: #008000"># of their mean.</span>
-<span style="color: #0000ff">for</span> word <span style="color: #0000ff">in</span> word_data:
-    pct = word_data[word][<span style="color: #a31515">&#39;pct&#39;</span>]
-    word_data[word][<span style="color: #a31515">&#39;n&#39;</span>] = len(pct)
-    word_data[word][<span style="color: #a31515">&#39;mean_pct&#39;</span>] = mean(pct)
-    word_data[word][<span style="color: #a31515">&#39;sterr_pct&#39;</span>] = sterr(pct)
+# Compute the mean pct increase/decrease for all homes with
+# a given word in their description. Also compute number of home
+# descriptions containing that word. Finally, compute the standard error
+# of the mean so that we can only include words with a &quot;reliable&quot; estimate
+# of their mean.
+for word in word_data:
+    pct = word_data[word][&#39;pct&#39;]
+    word_data[word][&#39;n&#39;] = len(pct)
+    word_data[word][&#39;mean_pct&#39;] = mean(pct)
+    word_data[word][&#39;sterr_pct&#39;] = sterr(pct)
 
-<span style="color: #008000"># To eliminate &quot;noise&quot; words we will filter the list of words to only include</span>
-<span style="color: #008000"># those with a small standard error of the mean</span>
-<span style="color: #0000ff">for</span> word <span style="color: #0000ff">in</span> word_data.keys():
-    <span style="color: #0000ff">if</span> word_data[word][<span style="color: #a31515">&#39;sterr_pct&#39;</span>] &gt; .9 <span style="color: #0000ff">or</span> word_data[word][<span style="color: #a31515">&#39;n&#39;</span>] &lt; 50 <span style="color: #0000ff">or</span> \
+# To eliminate &quot;noise&quot; words we will filter the list of words to only include
+# those with a small standard error of the mean
+for word in word_data.keys():
+    if word_data[word][&#39;sterr_pct&#39;] &gt; .9 or word_data[word][&#39;n&#39;] &lt; 50 or \
     len(word) &lt; 4:
-        <span style="color: #0000ff">del</span> word_data[word]
+        del word_data[word]
 
-html = <span style="color: #a31515">&#39;&#39;</span>
+html = &#39;&#39;
 
-<span style="color: #008000"># Bin words into groups of nearest 0.1 pct (* 10 to keep as integer)</span>
+# Bin words into groups of nearest 0.1 pct (* 10 to keep as integer)
 bins = {}
-<span style="color: #0000ff">for</span> word <span style="color: #0000ff">in</span> word_data:
-    <span style="color: #008000"># Round mean percent to nearest 0.1</span>
-    bin = int(round(word_data[word][<span style="color: #a31515">&#39;mean_pct&#39;</span>] * 10))
-    <span style="color: #0000ff">if</span> bin <span style="color: #0000ff">not</span> <span style="color: #0000ff">in</span> bins:
+for word in word_data:
+    # Round mean percent to nearest 0.1
+    bin = int(round(word_data[word][&#39;mean_pct&#39;] * 10))
+    if bin not in bins:
         bins[bin] = []
     bins[bin].append(word)
-<span style="color: #008000"># Create vector equi-spaced bins</span>
+# Create vector equi-spaced bins
 all_bins = range(max(bins.keys()), min(bins.keys()) - 1, -1)
 
-<span style="color: #008000"># Add y-axis labels</span>
-html += <span style="color: #a31515">&quot;&quot;&quot;&lt;p&gt;Sale price relative to asking&lt;/p&gt;</span>
-<span style="color: #a31515">&lt;div class=&quot;row-fluid&quot;&gt;</span>
-<span style="color: #a31515">  &lt;div class=&quot;span1 muted&quot; style=&quot;line-height: 2.5;&quot;&gt;</span>
-<span style="color: #a31515">&quot;&quot;&quot;</span>
-<span style="color: #0000ff">for</span> bin <span style="color: #0000ff">in</span> all_bins:
-    html += <span style="color: #a31515">&#39;%+.1f%%&#39;</span> % (bin / 10.,)
-    html += <span style="color: #a31515">&#39;&lt;br /&gt;&#39;</span>
-html += <span style="color: #a31515">&#39;&lt;/div&gt;&#39;</span>
+# Add y-axis labels
+html += &quot;&quot;&quot;&lt;p&gt;Sale price relative to asking&lt;/p&gt;
+&lt;div class=&quot;row-fluid&quot;&gt;
+  &lt;div class=&quot;span1 muted&quot; style=&quot;line-height: 2.5;&quot;&gt;
+&quot;&quot;&quot;
+for bin in all_bins:
+    html += &#39;%+.1f%%&#39; % (bin / 10.,)
+    html += &#39;&lt;br /&gt;&#39;
+html += &#39;&lt;/div&gt;&#39;
 
-<span style="color: #008000"># Draw word bubbles</span>
-html += <span style="color: #a31515">&#39;&lt;div class=&quot;span11&quot; style=&quot;text-align: center; line-height: 2.5;&quot;&gt;&#39;</span>
-<span style="color: #0000ff">for</span> bin <span style="color: #0000ff">in</span> all_bins:
-    <span style="color: #008000"># Define color of word bubble</span>
-    <span style="color: #0000ff">if</span> bin &gt; 0:
-        <span style="color: #008000"># Increasingly blue for higher pct</span>
-        color = <span style="color: #a31515">&#39;hsl(200, 100%%, %d%%)&#39;</span> % (95 - bin,)
-    <span style="color: #0000ff">elif</span> bin &lt; 0:
-        <span style="color: #008000"># Increasingly red for lower pct</span>
-        color = <span style="color: #a31515">&#39;hsl(0, 100%%, %d%%)&#39;</span> % (95 + bin,)
-    <span style="color: #0000ff">else</span>:
-        <span style="color: #008000"># Gray if pct = 0</span>
-        color = <span style="color: #a31515">&#39;hsl(0, 0%, 90%)&#39;</span>
-    <span style="color: #0000ff">if</span> bin <span style="color: #0000ff">not</span> <span style="color: #0000ff">in</span> bins:
-        <span style="color: #008000"># If there are no words in this bin, skip drawing any bubbles</span>
-        html += <span style="color: #a31515">&#39;&lt;br /&gt;&#39;</span>
-        <span style="color: #0000ff">continue</span>
-    <span style="color: #008000"># OK, there are some words to draw!</span>
-    <span style="color: #0000ff">for</span> word <span style="color: #0000ff">in</span> bins[bin]:
-        <span style="color: #008000"># Get a random sample of the concordances for this word</span>
-        random.shuffle(word_data[word][<span style="color: #a31515">&#39;concordances&#39;</span>])
-        concordance = <span style="color: #a31515">&#39;&#39;</span>.join(word_data[word][<span style="color: #a31515">&#39;concordances&#39;</span>][:8])
-        concordance = concordance.replace(<span style="color: #a31515">&#39;&quot;&#39;</span>, <span style="color: #a31515">&quot;&#39;&quot;</span>)
-        <span style="color: #008000"># Draw the bubble with concordance as a tooltip</span>
-        html += <span style="color: #a31515">&quot;&quot;&quot;&lt;span style=&quot;background-color:%s;</span>
-<span style="color: #a31515">padding:10px; border-radius:15px;&quot; rel=&quot;tooltip&quot; data-html=&quot;true&quot;</span>
-<span style="color: #a31515">title=&quot;%s&quot;&gt;%s&lt;/span&gt;&quot;&quot;&quot;</span> % (color, concordance, word)
-    html += <span style="color: #a31515">&quot;&lt;br /&gt;&quot;</span>
-html += <span style="color: #a31515">&quot;&quot;&quot;&lt;/div&gt;</span>
-<span style="color: #a31515">&lt;/div&gt;</span>
-<span style="color: #a31515">&quot;&quot;&quot;</span>
+# Draw word bubbles
+html += &#39;&lt;div class=&quot;span11&quot; style=&quot;text-align: center; line-height: 2.5;&quot;&gt;&#39;
+for bin in all_bins:
+    # Define color of word bubble
+    if bin &gt; 0:
+        # Increasingly blue for higher pct
+        color = &#39;hsl(200, 100%%, %d%%)&#39; % (95 - bin,)
+    elif bin &lt; 0:
+        # Increasingly red for lower pct
+        color = &#39;hsl(0, 100%%, %d%%)&#39; % (95 + bin,)
+    else:
+        # Gray if pct = 0
+        color = &#39;hsl(0, 0%, 90%)&#39;
+    if bin not in bins:
+        # If there are no words in this bin, skip drawing any bubbles
+        html += &#39;&lt;br /&gt;&#39;
+        continue
+    # OK, there are some words to draw!
+    for word in bins[bin]:
+        # Get a random sample of the concordances for this word
+        random.shuffle(word_data[word][&#39;concordances&#39;])
+        concordance = &#39;&#39;.join(word_data[word][&#39;concordances&#39;][:8])
+        concordance = concordance.replace(&#39;&quot;&#39;, &quot;&#39;&quot;)
+        # Draw the bubble with concordance as a tooltip
+        html += &quot;&quot;&quot;&lt;span style=&quot;background-color:%s;
+padding:10px; border-radius:15px;&quot; rel=&quot;tooltip&quot; data-html=&quot;true&quot;
+title=&quot;%s&quot;&gt;%s&lt;/span&gt;&quot;&quot;&quot; % (color, concordance, word)
+    html += &quot;&lt;br /&gt;&quot;
+html += &quot;&quot;&quot;&lt;/div&gt;
+&lt;/div&gt;
+&quot;&quot;&quot;
 
-<span style="color: #0000ff">print</span> html
-</pre></div>
+print html
+</code></pre>
 
 
 </div>
