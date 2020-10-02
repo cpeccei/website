@@ -4,7 +4,7 @@ title: A Statistical Analysis of the Sherlock Holmes Stories
 
 [&larr; Back to main page](/)
 
-<img src="holmes.jpg" alt="Holmes and Watson" style="margin-right:15px; float:left">
+![Holmes and Watson](holmes.jpg)
 Sir Arthur Conan Doyle's Sherlock Holmes stories represent some of the finest
 detective literature ever written. In total Doyle wrote four Holmes novels and
 56 short stories, a body of work enthusiasts affectionately refer to as "The
@@ -42,7 +42,7 @@ point scale: one star being worst, five stars being best.
   </tr>
   <tr>
     <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-    <td style="padding: 10px;">
+    <td>
     A Scandal In Bohemia,
     The Red-Headed League,
     The Adventure Of The Blue Carbuncle,
@@ -58,7 +58,7 @@ point scale: one star being worst, five stars being best.
   </tr>
   <tr>
     <td>&#9733;&#9733;&#9733;&#9733;</td>
-    <td style="padding: 10px;">
+    <td>
     The Man With The Twisted Lip,
     The Adventure Of The Copper Beeches,
     The Naval Treaty,
@@ -74,7 +74,7 @@ point scale: one star being worst, five stars being best.
   </tr>
   <tr>
     <td>&#9733;&#9733;&#9733;</td>
-    <td style="padding: 10px;">
+    <td>
     The Boscombe Valley Mystery,
     The Five Orange Pips,
     The Adventure Of The Engineer's Thumb,
@@ -91,7 +91,7 @@ point scale: one star being worst, five stars being best.
   </tr>
   <tr>
     <td>&#9733;&#9733;</td>
-    <td style="padding: 10px;">
+    <td>
     A Case Of Identity,
     The Adventure Of The Noble Bachelor,
     The Yellow Face,
@@ -107,7 +107,7 @@ point scale: one star being worst, five stars being best.
   </tr>
   <tr>
     <td>&#9733;</td>
-    <td style="padding: 10px;">
+    <td>
     The Adventure Of The Beryl Coronet,
     The Stock-Broker's Clerk,
     The Adventure Of The Three Students,
@@ -300,291 +300,61 @@ quality predicted by the model. In many cases the model precisely agrees with
 the experts (indicated by a set of green stars). Even in the cases where the
 model is wrong (shown in red), it is usually only off by one star.
 
-<table class="table">
-<tr>
-<th>Story</th>
-<th>Actual Quality</th>
-<th>Predicted Quality</th>
-</tr>
-<tr>
-<td>A Scandal In Bohemia</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Red-headed League</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>A Case Of Identity</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Boscombe Valley Mystery</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Five Orange Pips</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Man With The Twisted Lip</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Blue Carbuncle</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Speckled Band</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Engineer's Thumb</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Noble Bachelor</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Beryl Coronet</td>
-<td>&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Copper Beeches</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>Silver Blaze</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Yellow Face</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Stock-broker's Clerk</td>
-<td>&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The "gloria Scott"</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Musgrave Ritual</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Reigate Puzzle</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Crooked Man</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Resident Patient</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Greek Interpreter</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Naval Treaty</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Final Problem</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Empty House</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Norwood Builder</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Dancing Men</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Solitary Cyclist</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Priory School</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of Black Peter</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of Charles Augustus Milverton</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Six Napoleons</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Three Students</td>
-<td>&#9733;</td>
-<td><span style="color:#00aa00">&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Golden Pince-nez</td>
-<td>&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Missing Three-quarter</td>
-<td>&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Abbey Grange</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Second Stain</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of Wisteria Lodge</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Cardboard Box</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Red Circle</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Bruce-partington Plans</td>
-<td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Dying Detective</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Disappearance Of Lady Frances Carfax</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Devil's Foot</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>His Last Bow</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Illustrious Client</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Blanched Soldier</td>
-<td>&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Mazarin Stone</td>
-<td>&#9733;</td>
-<td><span style="color:#00aa00">&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Three Gables</td>
-<td>&#9733;</td>
-<td><span style="color:#00aa00">&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Sussex Vampire</td>
-<td>&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Three Garridebs</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Problem Of Thor Bridge</td>
-<td>&#9733;&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Creeping Man</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Lion's Mane</td>
-<td>&#9733;&#9733;&#9733;</td>
-<td><span style="color:#aa0000">&#9733;&#9733;&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Veiled Lodger</td>
-<td>&#9733;</td>
-<td><span style="color:#00aa00">&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of Shoscombe Old Place</td>
-<td>&#9733;&#9733;</td>
-<td><span style="color:#00aa00">&#9733;&#9733;</span></td>
-</tr>
-<tr>
-<td>The Adventure Of The Retired Colourman</td>
-<td>&#9733;</td>
-<td><span style="color:#00aa00">&#9733;</span></td>
-</tr>
-
-</table>
+| Story | Actual Quality | Predicted Quality |
+|-------|----------------|-------------------|
+| A Scandal In Bohemia                         | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Red-headed League                        | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| A Case Of Identity                           | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Boscombe Valley Mystery                  | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Five Orange Pips                         | &#9733;&#9733;&#9733;               | [&#9733;&#9733;]{.wrong}                        |
+| The Man With The Twisted Lip                 | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;&#9733;]{.correct}        |
+| The Adventure Of The Blue Carbuncle          | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Speckled Band           | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| The Adventure Of The Engineer's Thumb        | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Adventure Of The Noble Bachelor          | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Beryl Coronet           | &#9733;                             | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Copper Beeches          | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| Silver Blaze                                 | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Yellow Face                              | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Stock-broker's Clerk                     | &#9733;                             | [&#9733;&#9733;]{.wrong}                        |
+| The "gloria Scott"                           | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Musgrave Ritual                          | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Reigate Puzzle                           | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Crooked Man                              | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Resident Patient                         | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Greek Interpreter                        | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Naval Treaty                             | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;&#9733;]{.correct}        |
+| The Final Problem                            | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| The Adventure Of The Empty House             | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;&#9733;&#9733;]{.correct} |
+| The Adventure Of The Norwood Builder         | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Adventure Of The Dancing Men             | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| The Adventure Of The Solitary Cyclist        | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;&#9733;]{.correct}        |
+| The Adventure Of The Priory School           | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;&#9733;]{.correct}        |
+| The Adventure Of Black Peter                 | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Adventure Of Charles Augustus Milverton  | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;&#9733;]{.correct}        |
+| The Adventure Of The Six Napoleons           | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| The Adventure Of The Three Students          | &#9733;                             | [&#9733;]{.correct}                             |
+| The Adventure Of The Golden Pince-nez        | &#9733;                             | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Missing Three-quarter   | &#9733;                             | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Abbey Grange            | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Second Stain            | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of Wisteria Lodge              | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| The Adventure Of The Cardboard Box           | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;]{.correct}               |
+| The Adventure Of The Red Circle              | &#9733;&#9733;                      | [&#9733;&#9733;]{.correct}                      |
+| The Adventure Of The Bruce-partington Plans  | &#9733;&#9733;&#9733;&#9733;&#9733; | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Dying Detective         | &#9733;&#9733;&#9733;               | [&#9733;&#9733;]{.wrong}                        |
+| The Disappearance Of Lady Frances Carfax     | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Devil's Foot            | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;&#9733;&#9733;]{.wrong}   |
+| His Last Bow                                 | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;]{.wrong}                        |
+| The Illustrious Client                       | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| The Blanched Soldier                         | &#9733;                             | [&#9733;&#9733;]{.wrong}                        |
+| The Adventure Of The Mazarin Stone           | &#9733;                             | [&#9733;]{.correct}                             |
+| The Adventure Of The Three Gables            | &#9733;                             | [&#9733;]{.correct}                             |
+| The Adventure Of The Sussex Vampire          | &#9733;                             | [&#9733;&#9733;]{.wrong}                        |
+| The Adventure Of The Three Garridebs         | &#9733;&#9733;                      | [&#9733;&#9733;]{.correct}                      |
+| The Problem Of Thor Bridge                   | &#9733;&#9733;&#9733;&#9733;        | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Creeping Man            | &#9733;&#9733;                      | [&#9733;&#9733;&#9733;]{.wrong}                 |
+| The Adventure Of The Lion's Mane             | &#9733;&#9733;&#9733;               | [&#9733;&#9733;&#9733;&#9733;]{.wrong}          |
+| The Adventure Of The Veiled Lodger           | &#9733;                             | [&#9733;]{.correct}                             |
+| The Adventure Of Shoscombe Old Place         | &#9733;&#9733;                      | [&#9733;&#9733;]{.correct}                      |
+| The Adventure Of The Retired Colourman       | &#9733;                             | [&#9733;]{.correct}                             |

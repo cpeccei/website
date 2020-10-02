@@ -5,15 +5,8 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>A Statistical Analysis of the Sherlock Holmes Stories</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-  </style>
   <link rel="stylesheet" href="/base.css" />
+  <link rel="stylesheet" href="local.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -23,7 +16,7 @@
 <h1 class="title">A Statistical Analysis of the Sherlock Holmes Stories</h1>
 </header>
 <p><a href="/">← Back to main page</a></p>
-<p><img src="holmes.jpg" alt="Holmes and Watson" style="margin-right:15px; float:left"> Sir Arthur Conan Doyle’s Sherlock Holmes stories represent some of the finest detective literature ever written. In total Doyle wrote four Holmes novels and 56 short stories, a body of work enthusiasts affectionately refer to as “The Canon”. As might be expected with such a large corpus of text written over a period of forty years, there is a significant variation in quality between the Holmes stories. In general, Doyle’s earlier collections of stories (“The Adventures of Sherlock Holmes”, “The Memoirs of Sherlock Holmes”, “The Return of Sherlock Holmes”) are considered superior to his later ones (“The Casebook of Sherlock Holmes”, “His Last Bow”).</p>
+<p><img src="holmes.jpg" alt="Holmes and Watson" /> Sir Arthur Conan Doyle’s Sherlock Holmes stories represent some of the finest detective literature ever written. In total Doyle wrote four Holmes novels and 56 short stories, a body of work enthusiasts affectionately refer to as “The Canon”. As might be expected with such a large corpus of text written over a period of forty years, there is a significant variation in quality between the Holmes stories. In general, Doyle’s earlier collections of stories (“The Adventures of Sherlock Holmes”, “The Memoirs of Sherlock Holmes”, “The Return of Sherlock Holmes”) are considered superior to his later ones (“The Casebook of Sherlock Holmes”, “His Last Bow”).</p>
 <p>What makes a good Sherlock Holmes story? The quality of a piece of literature is difficult to measure objectively, and depends as much on personal preference as it does on writing style, plot development, characters, pacing and so on. Randall Stock’s article <a href="http://www.bestofsherlock.com/story/storyhm.htm">“Rating Sherlock Holmes”</a> (The Baker Street Journal, December 1999, pp. 5-11) polled Sherlockian experts from around the world to come up with a comprehensive ranking of all 56 short stories.</p>
 <p>I thought it would be interesting to explore how the quality of a story relates to statistical properties of the text itself. Does lots of dialog generally make for a good story? What about the length of the story, or the average number of words per sentence? Since the text of these works is now in the public domain (with some restrictions depending on the country you are in) it is possible to text mine the data, extract statistics from the text, and build a regression that relates them to the overall quality of the story.</p>
 <p>For simplicity, I turned the ranking of the 56 stories into ratings on a five point scale: one star being worst, five stars being best.</p>
@@ -40,7 +33,7 @@ Stories
 <td>
 ★★★★★
 </td>
-<td style="padding: 10px;">
+<td>
 A Scandal In Bohemia, The Red-Headed League, The Adventure Of The Blue Carbuncle, The Adventure Of The Speckled Band, Silver Blaze, The Musgrave Ritual, The Final Problem, The Adventure Of The Empty House, The Adventure Of The Dancing Men, The Adventure Of The Six Napoleons, The Adventure Of The Bruce-Partington Plans
 </td>
 </tr>
@@ -48,7 +41,7 @@ A Scandal In Bohemia, The Red-Headed League, The Adventure Of The Blue Carbuncle
 <td>
 ★★★★
 </td>
-<td style="padding: 10px;">
+<td>
 The Man With The Twisted Lip, The Adventure Of The Copper Beeches, The Naval Treaty, The Adventure Of The Solitary Cyclist, The Adventure Of The Priory School, The Adventure Of Charles Augustus Milverton The Adventure Of The Abbey Grange, The Adventure Of The Second Stain, The Adventure Of The Devil’s Foot, His Last Bow, The Problem Of Thor Bridge
 </td>
 </tr>
@@ -56,7 +49,7 @@ The Man With The Twisted Lip, The Adventure Of The Copper Beeches, The Naval Tre
 <td>
 ★★★
 </td>
-<td style="padding: 10px;">
+<td>
 The Boscombe Valley Mystery, The Five Orange Pips, The Adventure Of The Engineer’s Thumb, The “Gloria Scott”, The Crooked Man, The Greek Interpreter, The Adventure Of The Norwood Builder, The Adventure Of Black Peter, The Adventure Of The Cardboard Box, The Adventure Of The Dying Detective, The Illustrious Client, The Adventure Of The Lion’s Mane
 </td>
 </tr>
@@ -64,7 +57,7 @@ The Boscombe Valley Mystery, The Five Orange Pips, The Adventure Of The Engineer
 <td>
 ★★
 </td>
-<td style="padding: 10px;">
+<td>
 A Case Of Identity, The Adventure Of The Noble Bachelor, The Yellow Face, The Reigate Puzzle, The Resident Patient, The Adventure Of Wisteria Lodge, The Adventure Of The Red Circle, The Disappearance Of Lady Frances Carfax, The Adventure Of The Three Garridebs, The Adventure Of The Creeping Man, The Adventure Of Shoscombe Old Place
 </td>
 </tr>
@@ -72,7 +65,7 @@ A Case Of Identity, The Adventure Of The Noble Bachelor, The Yellow Face, The Re
 <td>
 ★
 </td>
-<td style="padding: 10px;">
+<td>
 The Adventure Of The Beryl Coronet, The Stock-Broker’s Clerk, The Adventure Of The Three Students, The Adventure Of The Golden Pince-Nez, The Adventure Of The Missing Three-Quarter, The Blanched Soldier, The Adventure Of The Mazarin Stone, The Adventure Of The Three Gables, The Adventure Of The Sussex Vampire, The Adventure Of The Veiled Lodger, The Adventure Of The Retired Colourman
 </td>
 </tr>
@@ -210,634 +203,296 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </ul>
 <h2 id="model-performance">Model Performance</h2>
 <p>Although this is a very simple model with only three variables it does surprisingly well at predicting the quality of a story. The table below shows the actual quality of each story (as determined by a poll of experts) versus the quality predicted by the model. In many cases the model precisely agrees with the experts (indicated by a set of green stars). Even in the cases where the model is wrong (shown in red), it is usually only off by one star.</p>
-<table class="table">
-<tr>
-<th>
-Story
-</th>
-<th>
-Actual Quality
-</th>
-<th>
-Predicted Quality
-</th>
+<table>
+<thead>
+<tr class="header">
+<th>Story</th>
+<th>Actual Quality</th>
+<th>Predicted Quality</th>
 </tr>
-<tr>
-<td>
-A Scandal In Bohemia
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A Scandal In Bohemia</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Red-headed League
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="even">
+<td>The Red-headed League</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-A Case Of Identity
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>A Case Of Identity</td>
+<td>★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Boscombe Valley Mystery
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="even">
+<td>The Boscombe Valley Mystery</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Five Orange Pips
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#aa0000">★★</span>
-</td>
+<tr class="odd">
+<td>The Five Orange Pips</td>
+<td>★★★</td>
+<td><span class="wrong">★★</span></td>
 </tr>
-<tr>
-<td>
-The Man With The Twisted Lip
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★★</span>
-</td>
+<tr class="even">
+<td>The Man With The Twisted Lip</td>
+<td>★★★★</td>
+<td><span class="correct">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Blue Carbuncle
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Blue Carbuncle</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Speckled Band
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Speckled Band</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Engineer’s Thumb
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Engineer’s Thumb</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Noble Bachelor
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Noble Bachelor</td>
+<td>★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Beryl Coronet
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Beryl Coronet</td>
+<td>★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Copper Beeches
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Copper Beeches</td>
+<td>★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-Silver Blaze
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>Silver Blaze</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Yellow Face
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Yellow Face</td>
+<td>★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Stock-broker’s Clerk
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#aa0000">★★</span>
-</td>
+<tr class="odd">
+<td>The Stock-broker’s Clerk</td>
+<td>★</td>
+<td><span class="wrong">★★</span></td>
 </tr>
-<tr>
-<td>
-The “gloria Scott”
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="even">
+<td>The “gloria Scott”</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Musgrave Ritual
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>The Musgrave Ritual</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Reigate Puzzle
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Reigate Puzzle</td>
+<td>★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Crooked Man
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="odd">
+<td>The Crooked Man</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Resident Patient
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Resident Patient</td>
+<td>★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Greek Interpreter
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="odd">
+<td>The Greek Interpreter</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Naval Treaty
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★★</span>
-</td>
+<tr class="even">
+<td>The Naval Treaty</td>
+<td>★★★★</td>
+<td><span class="correct">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Final Problem
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="odd">
+<td>The Final Problem</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Empty House
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Empty House</td>
+<td>★★★★★</td>
+<td><span class="correct">★★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Norwood Builder
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Norwood Builder</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Dancing Men
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Dancing Men</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Solitary Cyclist
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Solitary Cyclist</td>
+<td>★★★★</td>
+<td><span class="correct">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Priory School
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Priory School</td>
+<td>★★★★</td>
+<td><span class="correct">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of Black Peter
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of Black Peter</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of Charles Augustus Milverton
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of Charles Augustus Milverton</td>
+<td>★★★★</td>
+<td><span class="correct">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Six Napoleons
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Six Napoleons</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Three Students
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#00aa00">★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Three Students</td>
+<td>★</td>
+<td><span class="correct">★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Golden Pince-nez
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Golden Pince-nez</td>
+<td>★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Missing Three-quarter
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Missing Three-quarter</td>
+<td>★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Abbey Grange
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Abbey Grange</td>
+<td>★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Second Stain
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Second Stain</td>
+<td>★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of Wisteria Lodge
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of Wisteria Lodge</td>
+<td>★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Cardboard Box
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#00aa00">★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Cardboard Box</td>
+<td>★★★</td>
+<td><span class="correct">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Red Circle
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#00aa00">★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Red Circle</td>
+<td>★★</td>
+<td><span class="correct">★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Bruce-partington Plans
-</td>
-<td>
-★★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Bruce-partington Plans</td>
+<td>★★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Dying Detective
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#aa0000">★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Dying Detective</td>
+<td>★★★</td>
+<td><span class="wrong">★★</span></td>
 </tr>
-<tr>
-<td>
-The Disappearance Of Lady Frances Carfax
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Disappearance Of Lady Frances Carfax</td>
+<td>★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Devil’s Foot
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Devil’s Foot</td>
+<td>★★★★</td>
+<td><span class="wrong">★★★★★</span></td>
 </tr>
-<tr>
-<td>
-His Last Bow
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★</span>
-</td>
+<tr class="even">
+<td>His Last Bow</td>
+<td>★★★★</td>
+<td><span class="wrong">★★</span></td>
 </tr>
-<tr>
-<td>
-The Illustrious Client
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="odd">
+<td>The Illustrious Client</td>
+<td>★★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Blanched Soldier
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#aa0000">★★</span>
-</td>
+<tr class="even">
+<td>The Blanched Soldier</td>
+<td>★</td>
+<td><span class="wrong">★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Mazarin Stone
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#00aa00">★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Mazarin Stone</td>
+<td>★</td>
+<td><span class="correct">★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Three Gables
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#00aa00">★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Three Gables</td>
+<td>★</td>
+<td><span class="correct">★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Sussex Vampire
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#aa0000">★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Sussex Vampire</td>
+<td>★</td>
+<td><span class="wrong">★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Three Garridebs
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#00aa00">★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Three Garridebs</td>
+<td>★★</td>
+<td><span class="correct">★★</span></td>
 </tr>
-<tr>
-<td>
-The Problem Of Thor Bridge
-</td>
-<td>
-★★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="odd">
+<td>The Problem Of Thor Bridge</td>
+<td>★★★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Creeping Man
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#aa0000">★★★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Creeping Man</td>
+<td>★★</td>
+<td><span class="wrong">★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Lion’s Mane
-</td>
-<td>
-★★★
-</td>
-<td>
-<span style="color:#aa0000">★★★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of The Lion’s Mane</td>
+<td>★★★</td>
+<td><span class="wrong">★★★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Veiled Lodger
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#00aa00">★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Veiled Lodger</td>
+<td>★</td>
+<td><span class="correct">★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of Shoscombe Old Place
-</td>
-<td>
-★★
-</td>
-<td>
-<span style="color:#00aa00">★★</span>
-</td>
+<tr class="odd">
+<td>The Adventure Of Shoscombe Old Place</td>
+<td>★★</td>
+<td><span class="correct">★★</span></td>
 </tr>
-<tr>
-<td>
-The Adventure Of The Retired Colourman
-</td>
-<td>
-★
-</td>
-<td>
-<span style="color:#00aa00">★</span>
-</td>
+<tr class="even">
+<td>The Adventure Of The Retired Colourman</td>
+<td>★</td>
+<td><span class="correct">★</span></td>
 </tr>
+</tbody>
 </table>
 </body>
 </html>

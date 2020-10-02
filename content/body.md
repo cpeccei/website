@@ -1,17 +1,5 @@
 ---
 title: Christian Peccei's Homepage
-header-includes: |
-    <style>
-    div p {
-      display: grid;
-      grid-template-columns: 60px auto;
-      align-items: center;
-    }
-    div img {
-      width: 40px;
-      filter:contrast(70%);
-    }
-    </style>
 ---
 
 Hello and welcome to my homepage! In my spare time I enjoy working on fun data
