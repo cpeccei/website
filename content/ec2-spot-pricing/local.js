@@ -106,6 +106,7 @@ Highcharts.setOptions({
     }
 });
 
+document.getElementById("reset-btn").addEventListener("click", reset);
 document.getElementById("filter-memory").addEventListener("keyup", updateChart);
 document.getElementById("filter-vcpus").addEventListener("keyup", updateChart);
 document.getElementById("filter-mpv").addEventListener("keyup", updateChart);
