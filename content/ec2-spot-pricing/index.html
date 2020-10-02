@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Spot Pricing</title>
+  <link rel="stylesheet" href="/base.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- 1. Add these JavaScript inclusions in the head of your page -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Spot Pricing</h1>
+</header>
+<p><a href="/">← Back to main page</a></p>
+<label for="filter-memory">Minimum memory (GiB):</label>
+<input id="filter-memory" type="text" placeholder="value to filter"
+  value="0" size="10">
+<br>
+<label for="filter-vcpus">Minimum vCPUs:</label>
+<input id="filter-vcpus" type="text" placeholder="value to filter"
+  value="0" size="10"><br>
+<label for="filter-vcpus">Minimum memory (GiB) per vCPU:</label>
+<input id="filter-mpv" type="text" placeholder="value to filter"
+  value="0" size="10"><br>
+<label for="filter-type">Instance type (regex):</label>
+<input id="filter-type" type="text"
+  value="" size="10"><br>
+<label for="filter-architecture">Architecture:</label>
+<select id="filter-architecture">
+    <option value="any">Any</option>
+    <option value="x86_64">x86_64 only</option>
+    <option value="arm64">arm64 only</option>
+</select>
+<br>
+<label for="filter-region">Region:</label>
+<select id="filter-region">
+</select>
+<br>
+<input id="filter-currentgen" type="checkbox">
+<label for="filter-currentgen">Only show current generation</label><br>
+<button onclick="reset()">Reset all</button><br>
+
+<div id="container" style="width:100%; height:500px;"></div>
+</body>
+<script src="local.js"></script>
+</html>
