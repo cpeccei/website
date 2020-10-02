@@ -72,18 +72,19 @@ function getSeriesData() {
       '$' + (data[i].dollars_per_hour  * 24).toFixed(4) + ' / day<br>';
     seriesData.categories.push(data[i].instance_type);
     seriesData.price.push({name: label, y: data[i].dollars_per_hour,
-      color: null});
+      color: null, className: null});
     // seriesData.price.push(data[i].dollars_per_hour);
     seriesData.power.push(data[i].power);
   }
   minPower = Math.min(...seriesData.power);
   maxPower = Math.max(...seriesData.power);
   for (i = 0; i < seriesData.power.length; i++) {
-    // c = (seriesData.power[i] - minPower) / (maxPower - minPower) * 255;
-    seriesData.price[i].color = "rgb(" +
-      interp(seriesData.power[i], minPower, maxPower, 199, 65)   + ", " +
-      interp(seriesData.power[i], minPower, maxPower, 233, 171) + ", " +
-      interp(seriesData.power[i], minPower, maxPower, 192, 93)  + ")"
+    let ci = 2;
+    if (minPower < maxPower) {
+      ci = (seriesData.power[i] - minPower) / (maxPower - minPower);
+      ci = Math.min(Math.floor(ci * 5), 4);
+    }
+    seriesData.price[i].className = "power-" + ci;
   }
 }
 
@@ -120,7 +121,13 @@ getSeriesData();
 var myChart = Highcharts.chart({
   chart: {
     type: 'bar',
-    renderTo: 'container'
+    renderTo: 'container',
+    styledMode: true
+  },
+  plotOptions: {
+    series: {
+      colorByPoint: true
+    }
   },
   legend: {
       enabled: false
