@@ -27,3 +27,262 @@ pre {
   font-weight: bold;
   color: orange;
 }
+
+.inline-style-0 {line-height: 2.5;}
+.inline-style-1 {text-align: center; line-height: 2.5;}
+.inline-style-2 {background-color:hsl(200, 100%, 66%);
+padding:10px; border-radius:15px;}
+.inline-style-3 {background-color:hsl(200, 100%, 67%);
+padding:10px; border-radius:15px;}
+.inline-style-4 {background-color:hsl(200, 100%, 76%);
+padding:10px; border-radius:15px;}
+.inline-style-5 {background-color:hsl(200, 100%, 78%);
+padding:10px; border-radius:15px;}
+.inline-style-6 {background-color:hsl(200, 100%, 81%);
+padding:10px; border-radius:15px;}
+.inline-style-7 {background-color:hsl(200, 100%, 81%);
+padding:10px; border-radius:15px;}
+.inline-style-8 {background-color:hsl(200, 100%, 82%);
+padding:10px; border-radius:15px;}
+.inline-style-9 {background-color:hsl(200, 100%, 84%);
+padding:10px; border-radius:15px;}
+.inline-style-10 {background-color:hsl(200, 100%, 84%);
+padding:10px; border-radius:15px;}
+.inline-style-11 {background-color:hsl(200, 100%, 85%);
+padding:10px; border-radius:15px;}
+.inline-style-12 {background-color:hsl(200, 100%, 85%);
+padding:10px; border-radius:15px;}
+.inline-style-13 {background-color:hsl(200, 100%, 85%);
+padding:10px; border-radius:15px;}
+.inline-style-14 {background-color:hsl(200, 100%, 86%);
+padding:10px; border-radius:15px;}
+.inline-style-15 {background-color:hsl(200, 100%, 87%);
+padding:10px; border-radius:15px;}
+.inline-style-16 {background-color:hsl(200, 100%, 87%);
+padding:10px; border-radius:15px;}
+.inline-style-17 {background-color:hsl(200, 100%, 88%);
+padding:10px; border-radius:15px;}
+.inline-style-18 {background-color:hsl(200, 100%, 88%);
+padding:10px; border-radius:15px;}
+.inline-style-19 {background-color:hsl(200, 100%, 88%);
+padding:10px; border-radius:15px;}
+.inline-style-20 {background-color:hsl(200, 100%, 88%);
+padding:10px; border-radius:15px;}
+.inline-style-21 {background-color:hsl(200, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-22 {background-color:hsl(200, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-23 {background-color:hsl(200, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-24 {background-color:hsl(200, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-25 {background-color:hsl(200, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-26 {background-color:hsl(200, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-27 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-28 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-29 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-30 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-31 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-32 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-33 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-34 {background-color:hsl(200, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-35 {background-color:hsl(200, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-36 {background-color:hsl(200, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-37 {background-color:hsl(200, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-38 {background-color:hsl(200, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-39 {background-color:hsl(200, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-40 {background-color:hsl(200, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-41 {background-color:hsl(200, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-42 {background-color:hsl(200, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-43 {background-color:hsl(200, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-44 {background-color:hsl(200, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-45 {background-color:hsl(200, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-46 {background-color:hsl(200, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-47 {background-color:hsl(200, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-48 {background-color:hsl(200, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-49 {background-color:hsl(200, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-50 {background-color:hsl(200, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-51 {background-color:hsl(200, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-52 {background-color:hsl(200, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-53 {background-color:hsl(200, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-54 {background-color:hsl(200, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-55 {background-color:hsl(200, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-56 {background-color:hsl(200, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-57 {background-color:hsl(200, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-58 {background-color:hsl(200, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-59 {background-color:hsl(200, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-60 {background-color:hsl(200, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-61 {background-color:hsl(0, 0%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-62 {background-color:hsl(0, 0%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-63 {background-color:hsl(0, 0%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-64 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-65 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-66 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-67 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-68 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-69 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-70 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-71 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-72 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-73 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-74 {background-color:hsl(0, 100%, 94%);
+padding:10px; border-radius:15px;}
+.inline-style-75 {background-color:hsl(0, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-76 {background-color:hsl(0, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-77 {background-color:hsl(0, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-78 {background-color:hsl(0, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-79 {background-color:hsl(0, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-80 {background-color:hsl(0, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-81 {background-color:hsl(0, 100%, 93%);
+padding:10px; border-radius:15px;}
+.inline-style-82 {background-color:hsl(0, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-83 {background-color:hsl(0, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-84 {background-color:hsl(0, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-85 {background-color:hsl(0, 100%, 92%);
+padding:10px; border-radius:15px;}
+.inline-style-86 {background-color:hsl(0, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-87 {background-color:hsl(0, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-88 {background-color:hsl(0, 100%, 91%);
+padding:10px; border-radius:15px;}
+.inline-style-89 {background-color:hsl(0, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-90 {background-color:hsl(0, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-91 {background-color:hsl(0, 100%, 90%);
+padding:10px; border-radius:15px;}
+.inline-style-92 {background-color:hsl(0, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-93 {background-color:hsl(0, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-94 {background-color:hsl(0, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-95 {background-color:hsl(0, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-96 {background-color:hsl(0, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-97 {background-color:hsl(0, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-98 {background-color:hsl(0, 100%, 89%);
+padding:10px; border-radius:15px;}
+.inline-style-99 {background-color:hsl(0, 100%, 88%);
+padding:10px; border-radius:15px;}
+.inline-style-100 {background-color:hsl(0, 100%, 88%);
+padding:10px; border-radius:15px;}
+.inline-style-101 {background-color:hsl(0, 100%, 88%);
+padding:10px; border-radius:15px;}
+.inline-style-102 {background-color:hsl(0, 100%, 87%);
+padding:10px; border-radius:15px;}
+.inline-style-103 {background-color:hsl(0, 100%, 87%);
+padding:10px; border-radius:15px;}
+.inline-style-104 {background-color:hsl(0, 100%, 87%);
+padding:10px; border-radius:15px;}
+.inline-style-105 {background-color:hsl(0, 100%, 87%);
+padding:10px; border-radius:15px;}
+.inline-style-106 {background-color:hsl(0, 100%, 87%);
+padding:10px; border-radius:15px;}
+.inline-style-107 {background-color:hsl(0, 100%, 86%);
+padding:10px; border-radius:15px;}
+.inline-style-108 {background-color:hsl(0, 100%, 86%);
+padding:10px; border-radius:15px;}
+.inline-style-109 {background-color:hsl(0, 100%, 85%);
+padding:10px; border-radius:15px;}
+.inline-style-110 {background-color:hsl(0, 100%, 85%);
+padding:10px; border-radius:15px;}
+.inline-style-111 {background-color:hsl(0, 100%, 85%);
+padding:10px; border-radius:15px;}
+.inline-style-112 {background-color:hsl(0, 100%, 84%);
+padding:10px; border-radius:15px;}
+.inline-style-113 {background-color:hsl(0, 100%, 84%);
+padding:10px; border-radius:15px;}
+.inline-style-114 {background-color:hsl(0, 100%, 84%);
+padding:10px; border-radius:15px;}
+.inline-style-115 {background-color:hsl(0, 100%, 84%);
+padding:10px; border-radius:15px;}
+.inline-style-116 {background-color:hsl(0, 100%, 83%);
+padding:10px; border-radius:15px;}
+.inline-style-117 {background-color:hsl(0, 100%, 83%);
+padding:10px; border-radius:15px;}
+.inline-style-118 {background-color:hsl(0, 100%, 83%);
+padding:10px; border-radius:15px;}
+.inline-style-119 {background-color:hsl(0, 100%, 83%);
+padding:10px; border-radius:15px;}
+.inline-style-120 {background-color:hsl(0, 100%, 83%);
+padding:10px; border-radius:15px;}
+.inline-style-121 {background-color:hsl(0, 100%, 82%);
+padding:10px; border-radius:15px;}
+.inline-style-122 {background-color:hsl(0, 100%, 82%);
+padding:10px; border-radius:15px;}
+.inline-style-123 {background-color:hsl(0, 100%, 81%);
+padding:10px; border-radius:15px;}
+.inline-style-124 {background-color:hsl(0, 100%, 80%);
+padding:10px; border-radius:15px;}
+.inline-style-125 {background-color:hsl(0, 100%, 79%);
+padding:10px; border-radius:15px;}
+.inline-style-126 {background-color:hsl(0, 100%, 79%);
+padding:10px; border-radius:15px;}
+.inline-style-127 {background-color:hsl(0, 100%, 79%);
+padding:10px; border-radius:15px;}
+.inline-style-128 {background-color:hsl(0, 100%, 76%);
+padding:10px; border-radius:15px;}
+.inline-style-129 {background-color:hsl(0, 100%, 76%);
+padding:10px; border-radius:15px;}
