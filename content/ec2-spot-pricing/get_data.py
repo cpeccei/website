@@ -54,3 +54,7 @@ json_data = json.dumps(stats)
 with open('stats.json', 'w') as f:
     f.write(json_data)
 
+with open('load_data.js', 'w') as f:
+    f.write('let lastUpdateEpochTimeMs = {};\n'.format(round(now * 1000)))
+    f.write('let updatedMinutesAgo = Math.round((new Date() - lastUpdateEpochTimeMs) / (60 * 1000));\n')
+    f.write('data = ' + json_data + ';\n')

@@ -1,8 +1,10 @@
-var request = new XMLHttpRequest();
-request.open('GET', 'stats.json', false);  // `false` makes the request synchronous
-request.send(null);
-data = JSON.parse(request.responseText)
+// var request = new XMLHttpRequest();
+// request.open('GET', 'stats.json', false);  // `false` makes the request synchronous
+// request.send(null);
+// data = JSON.parse(request.responseText)
 
+var updated = document.getElementById("last-updated");
+updated.innerText = "Prices last updated " + updatedMinutesAgo + " minutes ago."
 var fr = document.getElementById("filter-region");
 var regions = {};
 for (i = 0; i < data.length; i++) {
@@ -39,7 +41,7 @@ function getSeriesData() {
   currentgen = document.getElementById("filter-currentgen").checked
   seriesData = {categories: [], price: [], power: []};
   power = [];
-  const regex = RegExp(insttype);
+  const regex = RegExp(insttype, "i");
   for (i = 0; i < data.length; i++) {
     if (seriesData.categories.length == 20) {
       break;
