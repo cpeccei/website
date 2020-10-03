@@ -21,10 +21,11 @@
 </header>
 <p><a href="/">← Back to main page</a></p>
 <p>This page shows the 20 lowest priced EC2 spot machines that
-match a set of user-defined criteria. Prices are refreshed every 30 minutes.
+match a set of user-defined criteria. Hover over the bars for details on
+each machine. Prices are refreshed every 30 minutes.
 The darker the bar the more powerful the machine (as computed using the very
 approximate formula: power = 0.036 * vCPUs + 0.0034 * GiB Memory +
-0.2 if a d-type machine with attached NVME storage + 0.3 if an n-type machine
+0.2 if a d-type machine with NVME storage + 0.3 if an n-type machine
 with enhanced networking).</p>
 <label for="filter-memory">Minimum memory (GiB):</label>
 <input id="filter-memory" type="text" placeholder="value to filter"
