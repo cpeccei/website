@@ -15,6 +15,9 @@ analysts and data scientists with a diverse set of skills and backgrounds.
 
 <div>
 
+![Icon](/ec2-spot-pricing/icon.png)
+[AWS EC2 Spot Pricing Optimizer](/ec2-spot-pricing/)
+
 ![Icon](/ec2-datascience/icon.png)
 [Building a Data Science AMI for AWS EC2](/ec2-datascience/)
 
