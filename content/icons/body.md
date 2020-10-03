@@ -9,6 +9,10 @@ using the Creative Commons CCBY License. Attribution details below.
 
 <div>
 
+![Dollar Target](/ec2-spot-pricing/icon.png)<span>
+["Dollar Target"](https://thenounproject.com/term/dollar-target/3001767) icon by Grafix Point, PK
+from [the Noun Project](https://thenounproject.com/)</span>
+
 ![Analysis](/ec2-datascience/icon.png)<span>
 ["Analysis"](https://thenounproject.com/term/analysis/3481060) icon by iconixar
 from [the Noun Project](https://thenounproject.com/)</span>

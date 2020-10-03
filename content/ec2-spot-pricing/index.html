@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Spot Pricing</title>
+  <link rel="stylesheet" href="/base.css" />
+  <link rel="stylesheet" href="local.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- 1. Add these JavaScript inclusions in the head of your page -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">AWS EC2 Spot Pricing Optimizer</h1>
+</header>
+<p><a href="/">← Back to main page</a></p>
+<p>This page shows the 20 lowest priced EC2 spot machines that
+match a set of user-defined criteria. Prices are refreshed every 30 minutes.
+The darker the bar the more powerful the machine (as computed using the very
+approximate formula: power = 0.036 * vCPUs + 0.0034 * GiB Memory +
+0.2 if a d-type machine with attached NVME storage + 0.3 if an n-type machine
+with enhanced networking).</p>
+<label for="filter-memory">Minimum memory (GiB):</label>
+<input id="filter-memory" type="text" placeholder="value to filter"
+  value="0" size="10">
+<br>
+<label for="filter-vcpus">Minimum vCPUs:</label>
+<input id="filter-vcpus" type="text" placeholder="value to filter"
+  value="0" size="10"><br>
+<label for="filter-vcpus">Minimum memory (GiB) per vCPU:</label>
+<input id="filter-mpv" type="text" placeholder="value to filter"
+  value="0" size="10"><br>
+<label for="filter-type">Instance type (regex):</label>
+<input id="filter-type" type="text"
+  value="" size="10"><br>
+<label for="filter-architecture">Architecture:</label>
+<select id="filter-architecture">
+    <option value="any">Any</option>
+    <option value="x86_64">x86_64 only</option>
+    <option value="arm64">arm64 only</option>
+</select>
+<br>
+<label for="filter-region">Region:</label>
+<select id="filter-region">
+</select>
+<br>
+<input id="filter-currentgen" type="checkbox">
+<label for="filter-currentgen">Only show current generation</label><br>
+<button id="reset-btn">Reset all</button><br>
+
+<p id="last-updated">Prices last updated</p>
+<div id="container"></div>
+</body>
+<script src="load_data.js"></script>
+<script src="local.js"></script>
+</html>
