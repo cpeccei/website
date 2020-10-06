@@ -1,22 +1,17 @@
-// var request = new XMLHttpRequest();
-// request.open('GET', 'stats.json', false);  // `false` makes the request synchronous
-// request.send(null);
-// data = JSON.parse(request.responseText)
+"use strict";
 
-var updated = document.getElementById("last-updated");
+let updated = document.getElementById("last-updated");
 updated.innerText = "Prices last updated " + updatedMinutesAgo + " minutes ago."
-var fr = document.getElementById("filter-region");
-var regions = {};
-for (i = 0; i < data.length; i++) {
-  regions[data[i].region] = true;
-}
-regions = Object.keys(regions);
-regions.sort();
-regions.forEach(function (item, index) {
-  var option = document.createElement("option");
-  option.text = item;
+
+let fr = document.getElementById("filter-region");
+let regionSet = new Set();
+for (let row of data) regionSet.add(row.region);
+let regions = Array.from(regionSet).sort();
+for (let region of regions) {
+  let option = document.createElement("option");
+  option.text = region;
   fr.add(option);
-});
+}
 fr.value = "us-west-2";
 
 function reset() {
@@ -30,17 +25,18 @@ function reset() {
   updateChart();
 }
 
-var seriesData;
+let seriesData;
 function getSeriesData() {
-  memory = document.getElementById("filter-memory").value
-  vcpus = document.getElementById("filter-vcpus").value
-  mpv = document.getElementById("filter-mpv").value
-  insttype = document.getElementById("filter-type").value
-  architecture = document.getElementById("filter-architecture").value
-  region = document.getElementById("filter-region").value
-  currentgen = document.getElementById("filter-currentgen").checked
-  seriesData = {categories: [], price: [], power: []};
-  power = [];
+  let memory = document.getElementById("filter-memory").value
+  let vcpus = document.getElementById("filter-vcpus").value
+  let mpv = document.getElementById("filter-mpv").value
+  let insttype = document.getElementById("filter-type").value
+  let architecture = document.getElementById("filter-architecture").value
+  let region = document.getElementById("filter-region").value
+  let currentgen = document.getElementById("filter-currentgen").checked
+  let seriesData = {categories: [], price: [], power: []};
+  let power = [];
+  // Restart here
   const regex = RegExp(insttype, "i");
   for (i = 0; i < data.length; i++) {
     if (seriesData.categories.length == 20) {
