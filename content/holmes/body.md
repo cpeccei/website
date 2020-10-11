@@ -4,7 +4,7 @@ title: A Statistical Analysis of the Sherlock Holmes Stories
 
 [&larr; Back to main page](/)
 
-![Holmes and Watson](holmes.jpg)
+<img src="holmes.jpg" alt="Holmes and Watson" class="float-img"/>
 Sir Arthur Conan Doyle's Sherlock Holmes stories represent some of the finest
 detective literature ever written. In total Doyle wrote four Holmes novels and
 56 short stories, a body of work enthusiasts affectionately refer to as "The
