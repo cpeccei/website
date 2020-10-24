@@ -34,61 +34,39 @@ function getSeriesData() {
   let architecture = document.getElementById("filter-architecture").value
   let region = document.getElementById("filter-region").value
   let currentgen = document.getElementById("filter-currentgen").checked
-  let seriesData = {categories: [], price: [], power: []};
+  seriesData = {categories: [], price: [], power: []};
   let power = [];
   // Restart here
   const regex = RegExp(insttype, "i");
-  for (i = 0; i < data.length; i++) {
-    if (seriesData.categories.length == 20) {
-      break;
-    }
-    if (data[i].memory_gib < memory) {
-      continue;
-    };
-    if (data[i].vcpus < vcpus) {
-      continue;
-    };
-    if (data[i].memory_gib_per_vcpu < mpv) {
-      continue;
-    };
-    if (!regex.test(data[i].instance_type)) {
-      continue;
-    };
-    if (currentgen && !data[i].current_generation) {
-      continue;
-    };
-    if (region != data[i].region) {
-      continue;
-    };
-    if (architecture != "any" && architecture != data[i].architecture) {
-      continue;
-    };
-    label = '<b>' + data[i].instance_type + '</b><br>' +
-      data[i].availability_zone + '<br>' +
-      data[i].memory_gib + ' GiB, ' + data[i].vcpus + ' vCPUs<br>' +
-      '$' + data[i].dollars_per_hour + ' / hour<br>' +
-      '$' + (data[i].dollars_per_hour  * 24).toFixed(4) + ' / day<br>';
-    seriesData.categories.push(data[i].instance_type);
-    seriesData.price.push({name: label, y: data[i].dollars_per_hour,
+  for (let row of data) {
+    if (seriesData.categories.length == 20) break;
+    if (row.memory_gib < memory) continue;
+    if (row.vcpus < vcpus) continue;
+    if (row.memory_gib_per_vcpu < mpv) continue;
+    if (!regex.test(row.instance_type)) continue;
+    if (currentgen && !row.current_generation) continue;
+    if (region != row.region) continue;
+    if (architecture != "any" && architecture != row.architecture) continue;
+    let label = '<b>' + row.instance_type + '</b><br>' +
+      row.availability_zone + '<br>' +
+      row.memory_gib + ' GiB, ' + row.vcpus + ' vCPUs<br>' +
+      '$' + row.dollars_per_hour + ' / hour<br>' +
+      '$' + (row.dollars_per_hour  * 24).toFixed(4) + ' / day<br>';
+    seriesData.categories.push(row.instance_type);
+    seriesData.price.push({name: label, y: row.dollars_per_hour,
       color: null, className: null});
-    // seriesData.price.push(data[i].dollars_per_hour);
-    seriesData.power.push(data[i].power);
+    seriesData.power.push(row.power);
   }
-  minPower = Math.min(...seriesData.power);
-  maxPower = Math.max(...seriesData.power);
-  for (i = 0; i < seriesData.power.length; i++) {
-    let ci = 2;
+  let minPower = Math.min(...seriesData.power);
+  let maxPower = Math.max(...seriesData.power);
+  for (let i = 0; i < seriesData.power.length; i++) {
+    let powerIndex = 2;
     if (minPower < maxPower) {
-      ci = (seriesData.power[i] - minPower) / (maxPower - minPower);
-      ci = Math.min(Math.floor(ci * 5), 4);
+      powerIndex = (seriesData.power[i] - minPower) / (maxPower - minPower);
+      powerIndex = Math.min(Math.floor(powerIndex * 5), 4);
     }
-    seriesData.price[i].className = "power-" + ci;
+    seriesData.price[i].className = "power-" + powerIndex;
   }
-}
-
-function interp(i, ib, ie, ob, oe) {
-  if (ib == ie) {return 0.5 * (oe - ob) + ob};
-  return Math.round((i - ib) / (ie - ib) * (oe - ob) + ob)
 }
 
 function updateChart() {
