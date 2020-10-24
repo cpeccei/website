@@ -1,31 +1,15 @@
 "use strict";
 
+let data;
+let seriesData;
+let myChart;
+
+let lastUpdateEpochTimeMs = 1603560675256;
+let updatedMinutesAgo = Math.round((new Date() - lastUpdateEpochTimeMs) / (60 * 1000));
 let updated = document.getElementById("last-updated");
 updated.innerText = "Prices last updated " + updatedMinutesAgo + " minutes ago."
 
-let fr = document.getElementById("filter-region");
-let regionSet = new Set();
-for (let row of data) regionSet.add(row.region);
-let regions = Array.from(regionSet).sort();
-for (let region of regions) {
-  let option = document.createElement("option");
-  option.text = region;
-  fr.add(option);
-}
-fr.value = "us-west-2";
 
-function reset() {
-  document.getElementById("filter-memory").value = 0;
-  document.getElementById("filter-vcpus").value = 0;
-  document.getElementById("filter-mpv").value = 0;
-  document.getElementById("filter-architecture").value = "any";
-  document.getElementById("filter-type").value = "";
-  document.getElementById("filter-region").value = "us-west-2";
-  document.getElementById("filter-currentgen").checked = false;
-  updateChart();
-}
-
-let seriesData;
 function getSeriesData() {
   let memory = document.getElementById("filter-memory").value
   let vcpus = document.getElementById("filter-vcpus").value
@@ -36,7 +20,6 @@ function getSeriesData() {
   let currentgen = document.getElementById("filter-currentgen").checked
   seriesData = {categories: [], price: [], power: []};
   let power = [];
-  // Restart here
   const regex = RegExp(insttype, "i");
   for (let row of data) {
     if (seriesData.categories.length == 20) break;
@@ -75,6 +58,18 @@ function updateChart() {
   myChart.xAxis[0].setCategories(seriesData.categories);
 }
 
+function reset() {
+  document.getElementById("filter-memory").value = 0;
+  document.getElementById("filter-vcpus").value = 0;
+  document.getElementById("filter-mpv").value = 0;
+  document.getElementById("filter-architecture").value = "any";
+  document.getElementById("filter-type").value = "";
+  document.getElementById("filter-region").value = "us-west-2";
+  document.getElementById("filter-currentgen").checked = false;
+  updateChart();
+}
+
+
 Highcharts.setOptions({
     chart: {
         style: {
@@ -92,42 +87,54 @@ document.getElementById("filter-architecture").addEventListener("change", update
 document.getElementById("filter-region").addEventListener("change", updateChart);
 document.getElementById("filter-currentgen").addEventListener("change", updateChart);
 
-getSeriesData();
-
-var myChart = Highcharts.chart({
-  chart: {
-    type: 'bar',
-    renderTo: 'container',
-    styledMode: true
-  },
-  plotOptions: {
-    series: {
-      colorByPoint: true
-    }
-  },
-  legend: {
-      enabled: false
-  },
-  title: {
-    text: undefined
-  },
-  xAxis: {
-    title: {
-      text: 'Instance Type'
+$.getJSON("stats.json", function(json) {
+  data = json;
+  let fr = document.getElementById("filter-region");
+  let regionSet = new Set();
+  for (let row of data) regionSet.add(row.region);
+  let regions = Array.from(regionSet).sort();
+  for (let region of regions) {
+    let option = document.createElement("option");
+    option.text = region;
+    fr.add(option);
+  }
+  myChart = Highcharts.chart({
+    chart: {
+      type: 'bar',
+      renderTo: 'container',
+      styledMode: true
     },
-    categories: seriesData.categories
-  },
-  yAxis: {
+    plotOptions: {
+      series: {
+        colorByPoint: true
+      }
+    },
+    legend: {
+        enabled: false
+    },
     title: {
-      text: '$ per hour'
-    }
-  },
-  tooltip: {
-    formatter: function() {
-      return this.point.name;
-    }
-  },
-  series: [{
-      data: seriesData.price
-    }]
+      text: undefined
+    },
+    xAxis: {
+      title: {
+        text: 'Instance Type'
+      },
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: '$ per hour'
+      }
+    },
+    tooltip: {
+      formatter: function() {
+        return this.point.name;
+      }
+    },
+    series: [{
+        data: []
+      }]
+  });
+  reset();
+
 });
