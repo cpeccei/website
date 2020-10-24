@@ -4,12 +4,6 @@ let data;
 let seriesData;
 let myChart;
 
-let lastUpdateEpochTimeMs = 1603560675256;
-let updatedMinutesAgo = Math.round((new Date() - lastUpdateEpochTimeMs) / (60 * 1000));
-let updated = document.getElementById("last-updated");
-updated.innerText = "Prices last updated " + updatedMinutesAgo + " minutes ago."
-
-
 function getSeriesData() {
   let memory = document.getElementById("filter-memory").value
   let vcpus = document.getElementById("filter-vcpus").value
@@ -136,5 +130,8 @@ $.getJSON("stats.json", function(json) {
       }]
   });
   reset();
-
+  let lastUpdateEpochTimeMs = data[0].last_update_epoch_time_ms;
+  let updatedMinutesAgo = Math.round((new Date() - lastUpdateEpochTimeMs) / (60 * 1000));
+  let updated = document.getElementById("last-updated");
+  updated.innerText = "Prices last updated " + updatedMinutesAgo + " minutes ago."
 });

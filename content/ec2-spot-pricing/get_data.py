@@ -24,6 +24,7 @@ for region in regions:
     spot_prices = [spot_price for page in response_iterator
         for spot_price in page['SpotPriceHistory']]
 
+    last_update_epoch_time_ms = round(now * 1000)
     for row in spot_prices:
         data = instance_types[row['InstanceType']]
         s = {
@@ -35,7 +36,8 @@ for region in regions:
             'architecture': ('arm64' if 'arm64' in
                 data['ProcessorInfo']['SupportedArchitectures'] else 'x86_64'),
             'vcpus': data['VCpuInfo']['DefaultVCpus'],
-            'memory_gib': data['MemoryInfo']['SizeInMiB'] / 1024.
+            'memory_gib': data['MemoryInfo']['SizeInMiB'] / 1024.,
+            'last_update_epoch_time_ms': last_update_epoch_time_ms
         }
         s['memory_gib_per_vcpu'] = s['memory_gib'] / s['vcpus']
         s['memory_gib_per_dollar'] = s['memory_gib'] / s['dollars_per_hour']
@@ -53,8 +55,3 @@ stats.sort(key=lambda x: (x['dollars_per_hour'], -x['power']))
 json_data = json.dumps(stats)
 with open('stats.json', 'w') as f:
     f.write(json_data)
-
-with open('load_data.js', 'w') as f:
-    f.write('let lastUpdateEpochTimeMs = {};\n'.format(round(now * 1000)))
-    f.write('let updatedMinutesAgo = Math.round((new Date() - lastUpdateEpochTimeMs) / (60 * 1000));\n')
-    f.write('data = ' + json_data + ';\n')
