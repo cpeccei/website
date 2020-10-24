@@ -1,23 +1,56 @@
-// var request = new XMLHttpRequest();
-// request.open('GET', 'stats.json', false);  // `false` makes the request synchronous
-// request.send(null);
-// data = JSON.parse(request.responseText)
+"use strict";
 
-var updated = document.getElementById("last-updated");
-updated.innerText = "Prices last updated " + updatedMinutesAgo + " minutes ago."
-var fr = document.getElementById("filter-region");
-var regions = {};
-for (i = 0; i < data.length; i++) {
-  regions[data[i].region] = true;
+let data;
+let seriesData;
+let myChart;
+
+function getSeriesData() {
+  let memory = document.getElementById("filter-memory").value
+  let vcpus = document.getElementById("filter-vcpus").value
+  let mpv = document.getElementById("filter-mpv").value
+  let insttype = document.getElementById("filter-type").value
+  let architecture = document.getElementById("filter-architecture").value
+  let region = document.getElementById("filter-region").value
+  let currentgen = document.getElementById("filter-currentgen").checked
+  seriesData = {categories: [], price: [], power: []};
+  let power = [];
+  const regex = RegExp(insttype, "i");
+  for (let row of data) {
+    if (seriesData.categories.length == 20) break;
+    if (row.memory_gib < memory) continue;
+    if (row.vcpus < vcpus) continue;
+    if (row.memory_gib_per_vcpu < mpv) continue;
+    if (!regex.test(row.instance_type)) continue;
+    if (currentgen && !row.current_generation) continue;
+    if (region != row.region) continue;
+    if (architecture != "any" && architecture != row.architecture) continue;
+    let label = '<b>' + row.instance_type + '</b><br>' +
+      row.availability_zone + '<br>' +
+      row.memory_gib + ' GiB, ' + row.vcpus + ' vCPUs<br>' +
+      '$' + row.dollars_per_hour + ' / hour<br>' +
+      '$' + (row.dollars_per_hour  * 24).toFixed(4) + ' / day<br>';
+    seriesData.categories.push(row.instance_type);
+    seriesData.price.push({name: label, y: row.dollars_per_hour,
+      color: null, className: null});
+    seriesData.power.push(row.power);
+  }
+  let minPower = Math.min(...seriesData.power);
+  let maxPower = Math.max(...seriesData.power);
+  for (let i = 0; i < seriesData.power.length; i++) {
+    let powerIndex = 2;
+    if (minPower < maxPower) {
+      powerIndex = (seriesData.power[i] - minPower) / (maxPower - minPower);
+      powerIndex = Math.min(Math.floor(powerIndex * 5), 4);
+    }
+    seriesData.price[i].className = "power-" + powerIndex;
+  }
 }
-regions = Object.keys(regions);
-regions.sort();
-regions.forEach(function (item, index) {
-  var option = document.createElement("option");
-  option.text = item;
-  fr.add(option);
-});
-fr.value = "us-west-2";
+
+function updateChart() {
+  getSeriesData();
+  myChart.series[0].setData(seriesData.price);
+  myChart.xAxis[0].setCategories(seriesData.categories);
+}
 
 function reset() {
   document.getElementById("filter-memory").value = 0;
@@ -30,76 +63,6 @@ function reset() {
   updateChart();
 }
 
-var seriesData;
-function getSeriesData() {
-  memory = document.getElementById("filter-memory").value
-  vcpus = document.getElementById("filter-vcpus").value
-  mpv = document.getElementById("filter-mpv").value
-  insttype = document.getElementById("filter-type").value
-  architecture = document.getElementById("filter-architecture").value
-  region = document.getElementById("filter-region").value
-  currentgen = document.getElementById("filter-currentgen").checked
-  seriesData = {categories: [], price: [], power: []};
-  power = [];
-  const regex = RegExp(insttype, "i");
-  for (i = 0; i < data.length; i++) {
-    if (seriesData.categories.length == 20) {
-      break;
-    }
-    if (data[i].memory_gib < memory) {
-      continue;
-    };
-    if (data[i].vcpus < vcpus) {
-      continue;
-    };
-    if (data[i].memory_gib_per_vcpu < mpv) {
-      continue;
-    };
-    if (!regex.test(data[i].instance_type)) {
-      continue;
-    };
-    if (currentgen && !data[i].current_generation) {
-      continue;
-    };
-    if (region != data[i].region) {
-      continue;
-    };
-    if (architecture != "any" && architecture != data[i].architecture) {
-      continue;
-    };
-    label = '<b>' + data[i].instance_type + '</b><br>' +
-      data[i].availability_zone + '<br>' +
-      data[i].memory_gib + ' GiB, ' + data[i].vcpus + ' vCPUs<br>' +
-      '$' + data[i].dollars_per_hour + ' / hour<br>' +
-      '$' + (data[i].dollars_per_hour  * 24).toFixed(4) + ' / day<br>';
-    seriesData.categories.push(data[i].instance_type);
-    seriesData.price.push({name: label, y: data[i].dollars_per_hour,
-      color: null, className: null});
-    // seriesData.price.push(data[i].dollars_per_hour);
-    seriesData.power.push(data[i].power);
-  }
-  minPower = Math.min(...seriesData.power);
-  maxPower = Math.max(...seriesData.power);
-  for (i = 0; i < seriesData.power.length; i++) {
-    let ci = 2;
-    if (minPower < maxPower) {
-      ci = (seriesData.power[i] - minPower) / (maxPower - minPower);
-      ci = Math.min(Math.floor(ci * 5), 4);
-    }
-    seriesData.price[i].className = "power-" + ci;
-  }
-}
-
-function interp(i, ib, ie, ob, oe) {
-  if (ib == ie) {return 0.5 * (oe - ob) + ob};
-  return Math.round((i - ib) / (ie - ib) * (oe - ob) + ob)
-}
-
-function updateChart() {
-  getSeriesData();
-  myChart.series[0].setData(seriesData.price);
-  myChart.xAxis[0].setCategories(seriesData.categories);
-}
 
 Highcharts.setOptions({
     chart: {
@@ -118,42 +81,57 @@ document.getElementById("filter-architecture").addEventListener("change", update
 document.getElementById("filter-region").addEventListener("change", updateChart);
 document.getElementById("filter-currentgen").addEventListener("change", updateChart);
 
-getSeriesData();
-
-var myChart = Highcharts.chart({
-  chart: {
-    type: 'bar',
-    renderTo: 'container',
-    styledMode: true
-  },
-  plotOptions: {
-    series: {
-      colorByPoint: true
-    }
-  },
-  legend: {
-      enabled: false
-  },
-  title: {
-    text: undefined
-  },
-  xAxis: {
-    title: {
-      text: 'Instance Type'
+$.getJSON("stats.json", function(json) {
+  data = json;
+  let fr = document.getElementById("filter-region");
+  let regionSet = new Set();
+  for (let row of data) regionSet.add(row.region);
+  let regions = Array.from(regionSet).sort();
+  for (let region of regions) {
+    let option = document.createElement("option");
+    option.text = region;
+    fr.add(option);
+  }
+  myChart = Highcharts.chart({
+    chart: {
+      type: 'bar',
+      renderTo: 'container',
+      styledMode: true
     },
-    categories: seriesData.categories
-  },
-  yAxis: {
+    plotOptions: {
+      series: {
+        colorByPoint: true
+      }
+    },
+    legend: {
+        enabled: false
+    },
     title: {
-      text: '$ per hour'
-    }
-  },
-  tooltip: {
-    formatter: function() {
-      return this.point.name;
-    }
-  },
-  series: [{
-      data: seriesData.price
-    }]
+      text: undefined
+    },
+    xAxis: {
+      title: {
+        text: 'Instance Type'
+      },
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: '$ per hour'
+      }
+    },
+    tooltip: {
+      formatter: function() {
+        return this.point.name;
+      }
+    },
+    series: [{
+        data: []
+      }]
+  });
+  reset();
+  let lastUpdateEpochTimeMs = data[0].last_update_epoch_time_ms;
+  let updatedMinutesAgo = Math.round((new Date() - lastUpdateEpochTimeMs) / (60 * 1000));
+  let updated = document.getElementById("last-updated");
+  updated.innerText = "Prices last updated " + updatedMinutesAgo + " minutes ago."
 });
