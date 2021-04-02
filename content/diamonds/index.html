@@ -25,7 +25,7 @@
 <li>Import the model into Mathematica and give it a nice user interface</li>
 </ol>
 <figure>
-<img src="pricingadiamond.jpg" alt="" /><figcaption>Mathematica Diamond Demonstration</figcaption>
+<img src="pricingadiamond.jpg" alt="Mathematica Diamond Demonstration" /><figcaption aria-hidden="true">Mathematica Diamond Demonstration</figcaption>
 </figure>
 <p>The final result is available at <a href="http://demonstrations.wolfram.com/PricingADiamond/">Pricing a Diamond</a> on the Wolfram Demonstrations site. This page gives some detailed background on the steps used to obtain the data and fit the model.</p>
 <h2 id="webscraping-diamond-data">Webscraping Diamond Data</h2>
@@ -143,7 +143,7 @@ f.close()</code></pre>
 x &lt;- tapply(d$price / 1000, round(d$carat), mean)
 plot(as.numeric(names(x)), x, type=&quot;b&quot;, xlab=&quot;Carats&quot;, ylab=&quot;Price ($K)&quot;</code></pre>
 <figure>
-<img src="price_carats.png" alt="" /><figcaption>Price vs. Carats</figcaption>
+<img src="price_carats.png" alt="Price vs. Carats" /><figcaption aria-hidden="true">Price vs. Carats</figcaption>
 </figure>
 <p>The line shows a clear exponential trend, which suggests using a generalized linear model with a log link to predict price. The code below fits this model, but also includes some higher-order interactions to capture the complex relationships between the four variables and price.</p>
 <pre class="r"><code>gm &lt;- glm(price ~ cut * clarity * color * carat +
@@ -155,12 +155,12 @@ plot(test$carat, predict(gm, test, type=&quot;response&quot;), xlab=&quot;Carats
 grid()</code></pre>
 <p>Here are the predictions from the model for price vs. carats; they closely match the observed data in the previous figure, which is good.</p>
 <figure>
-<img src="price_carats_model.png" alt="" /><figcaption>Modeled Price vs. Carats</figcaption>
+<img src="price_carats_model.png" alt="Modeled Price vs. Carats" /><figcaption aria-hidden="true">Modeled Price vs. Carats</figcaption>
 </figure>
 <h2 id="importing-the-model-into-mathematica">Importing the Model into Mathematica</h2>
 <p>Mathematica 6.0 has the ability to quickly create dynamic user interfaces using the Manipulate function. The last step in this project is to export the model coefficients from R and import them into Mathematica, then wrap a GUI around them using Manipulate so users can interactively explore the relationship between the Four C’s and price. The actual model is fairly complex since it has a lot of interaction terms, but it isn’t too much work to just paste it into a Mathematica notebook and create a function for price. Here is the Mathematica code for the final model:</p>
 <figure>
-<img src="model.png" alt="" /><figcaption>Final Model</figcaption>
+<img src="model.png" alt="Final Model" /><figcaption aria-hidden="true">Final Model</figcaption>
 </figure>
 <p>The final result is available at <a href="http://demonstrations.wolfram.com/PricingADiamond/">Pricing a Diamond</a> on the Wolfram Demonstrations site.</p>
 </body>

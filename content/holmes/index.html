@@ -178,7 +178,7 @@ plot(max.vars, mse, type = &quot;b&quot;, xlab = &quot;Number of variables in mo
   ylab = &quot;Cross-Validation Error&quot;, xaxp = c(0, 8, 8))
 points(max.vars[which.min(mse)], min(mse), pch = 16, col = &quot;red&quot;)</code></pre>
 <figure>
-<img src="variable_selection.png" alt="" /><figcaption>Cross-validated error</figcaption>
+<img src="variable_selection.png" alt="Cross-validated error" /><figcaption aria-hidden="true">Cross-validated error</figcaption>
 </figure>
 <p>Great, it looks like a model with three variables gives us the best performance. Let’s refit a three-variable model on all the data and take a look at the results.</p>
 <pre class="r"><code># Fit model

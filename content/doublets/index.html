@@ -19,7 +19,7 @@
 <p>Doublets are a type of word puzzle invented by Lewis Carroll (author of “Alice in Wonderland”). The goal is to change one word into another by adding, removing, or changing one letter at a time. The tricky part is that each intermediate step must also be a valid word. For more information see <a href="http://thinks.com/puzzles/doublets.htm" class="uri">http://thinks.com/puzzles/doublets.htm</a>.</p>
 <p>If we think of words as vertices in a graph, then two words are connected by an edge if the <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">edit distance</a> between them is exactly 1. Mathematica can then be used to solve a doublet with its shortest-path algorithm GraphPath.</p>
 <figure>
-<img src="mathematicadoublets.jpg" alt="" /><figcaption>Doublets</figcaption>
+<img src="mathematicadoublets.jpg" alt="Doublets" /><figcaption aria-hidden="true">Doublets</figcaption>
 </figure>
 <p>To see a real-time implementation of this you can take a look at my <a href="http://demonstrations.wolfram.com/Doublets/">Mathematica Doublets Demonstration</a>. This article goes into a bit more depth on how the demonstration was created. All the code is written for Mathematica 6.0.</p>
 <p>First, let’s get a list of all lowercase 5-letter words.</p>
@@ -41,7 +41,7 @@ Do[
 <p>Let’s plot the graph to see which words are connected.</p>
 <pre class="mathematica"><code>GraphPlot[g]</code></pre>
 <figure>
-<img src="full_graph.png" alt="" /><figcaption>Full Graph</figcaption>
+<img src="full_graph.png" alt="Full Graph" /><figcaption aria-hidden="true">Full Graph</figcaption>
 </figure>
 <p>There are quite a few little groups of words which are only connected to each other. We want to get rid of those and just keep the big cluster. The next step uses StrongComponents to automatically identify the biggest cluster and keep only that subset of the graph.</p>
 <pre class="mathematica"><code>Needs[&quot;GraphUtilities`&quot;]
@@ -54,7 +54,7 @@ s = StrongComponents[g];</code></pre>
 <p>Confirm that we have correctly filtered and are left with a big group of words where you can go from any word to any other by just changing one letter (i.e. EditDistance == 1).</p>
 <pre class="mathematica"><code>GraphPlot[gc]</code></pre>
 <figure>
-<img src="filtered_graph.png" alt="" /><figcaption>Filtered Graph</figcaption>
+<img src="filtered_graph.png" alt="Filtered Graph" /><figcaption aria-hidden="true">Filtered Graph</figcaption>
 </figure>
 <p>Let’s test that we can solve a doublet using the shortest-path algorithm built into Mathematica. We’ll find the shortest distance between the vertices “sleep” and “dream” in the graph <strong>gc</strong>.</p>
 <pre class="mathematica"><code>GraphPath[gc, &quot;sleep&quot;, &quot;dream&quot;]
