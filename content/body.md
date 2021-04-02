@@ -55,4 +55,4 @@ analysts and data scientists with a diverse set of skills and backgrounds.
 
 <br><br>
 Icons are from [the Noun Project](https://thenounproject.com/).
-Attribution details [here](/icons).
+Attribution details [here](/icon-attribution/).

@@ -18,7 +18,7 @@
 <p><a href="/">← Back to main page</a></p>
 <p>A photomosaic is a collection of small images that combine together to form a larger picture when viewed from a distance. Here is a famous example:</p>
 <figure>
-<img src="monalisa.jpg" alt="" /><figcaption>Mona Lisa photomosaic</figcaption>
+<img src="monalisa.jpg" alt="Mona Lisa photomosaic" /><figcaption aria-hidden="true">Mona Lisa photomosaic</figcaption>
 </figure>
 <p>There are many software packages available to produce photomosaics (I like <a href="http://www.complang.tuwien.ac.at/schani/metapixel/">Metapixel</a> for Linux and <a href="http://www.andreaplanet.com/andreamosaic/">AndreaMosaic</a> for Windows) but the quality of the output greatly depends on the set of input photos. The photomosaic will be much more visually entertaining if your input photos are as different as possible from each other. With digital cameras it is really easy to end up with eight near- duplicate shots of a single scene which makes for a very repetitive photomosaic.</p>
 <p>Another consideration is the aspect ratio of the input files; since the tiles in a photomosaic must all be the same size the software usually rescales images so they are all identical in width and height. This can produce poor results if you have a mixture of landscape and portrait photos, since one or the other will get squashed to fit the tile size of the photomosaic.</p>
@@ -135,7 +135,7 @@ output_name = &#39;%04d.%s&#39; % (i, &quot;jpg&quot;)
 prev_th.save(os.path.join(output_dir, output_name))</code></pre>
 <p>The output directory will now contain a nice set of deduped, resized and renamed images which can be fed straight into your photomosaic software. Here is the final output I created using Metapixel:</p>
 <figure>
-<img src="mosaic.jpg" alt="" /><figcaption>Wombat photomosaic</figcaption>
+<img src="mosaic.jpg" alt="Wombat photomosaic" /><figcaption aria-hidden="true">Wombat photomosaic</figcaption>
 </figure>
 <p>In case you’re wondering about the silhouette, it’s a profile picture of a wombat!</p>
 </body>

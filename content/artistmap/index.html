@@ -30,7 +30,7 @@
 </ol>
 <p>And here is the final product. Read on to see exactly how it was created.</p>
 <figure>
-<img src="artistmap.png" alt="" /><figcaption>Artist Map</figcaption>
+<img src="artistmap.png" alt="Artist Map" /><figcaption aria-hidden="true">Artist Map</figcaption>
 </figure>
 <p>The first step is to extract statistical features from the waveform of each MP3 file. I covered this step in depth in my earlier article <a href="/musicmap/">Mapping Your Music Collection</a> so please refer to that page for all the details.</p>
 <p>Next we use R to do the dimension reduction, aggregate the resulting points by artist, and plot the Voronoi diagram. Here’s the R code; you can also download the file <a href="songdata.csv">songdata.csv</a> which contains artist, album, track name, and 42 statistical features for 753 songs by 31 artists.</p>
