@@ -12,6 +12,7 @@ img {
 }
 pre {
     padding: 5px;
+    overflow-x: auto;
 }
 a {
     text-decoration: none;
