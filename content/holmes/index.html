@@ -127,66 +127,66 @@ The Adventure Of The Beryl Coronet, The Stock-Broker’s Clerk, The Adventure Of
 </dl>
 <h2 id="fitting-a-regression-model">Fitting a Regression Model</h2>
 <p>The first step is to get the data into R:</p>
-<pre class="r"><code># Clean up the workspace
-graphics.off()
-rm(list=ls())
-
-# Read in data
-f &lt;- read.csv(&quot;HolmesFeatures.csv&quot;)
-
-# Select only short stories (i.e. exclude novels)
-d &lt;- subset(f, collection != &quot;novel&quot;)
-
-# Convert rank (1=best to 56=worst) into quality (1=worst to 5=best)
-d$quality &lt;- as.numeric(cut(-d$rank, 5, labels=FALSE))</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># Clean up the workspace</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">graphics.off</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="co"># Read in data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>f &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;HolmesFeatures.csv&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="co"># Select only short stories (i.e. exclude novels)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>d &lt;-<span class="st"> </span><span class="kw">subset</span>(f, collection <span class="op">!=</span><span class="st"> &quot;novel&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="co"># Convert rank (1=best to 56=worst) into quality (1=worst to 5=best)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>d<span class="op">$</span>quality &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">cut</span>(<span class="op">-</span>d<span class="op">$</span>rank, <span class="dv">5</span>, <span class="dt">labels=</span><span class="ot">FALSE</span>))</span></code></pre></div>
 <p>Now we need to decide which variables to include in the regression. We have 12 variables that capture the statistical properties of the text and we would like to use these to predict the quality of the story on a scale of 1 to 5. However, we only have 56 observations (i.e. stories), so forcing all 12 variables into the model would almost certainly result in unreliable parameter estimates for some variables. Instead we will use cross-validation to pick the optimal number of variables that avoid overfitting our data. We use R’s stepwise variable selection to create models of increasing complexity, and then check the cross- validated mean-squared error of each of these models.</p>
-<pre class="r"><code># Define formula with all eligible variables for the regression
-fml.full &lt;- formula(quality ~
-  avg_chars_per_word +
-  avg_words_per_sentence +
-    num_words +
-  pct_dialog_words_with_exclamation +
-  pct_words_dialog +
-  pct_words_holmes +
-  pct_words_type_name +
-  pct_words_type_noun +
-  pct_words_type_other +
-  pct_words_type_stopword +
-  pct_words_type_verb +
-  pct_words_watson)
-
-# Create cross-validation folds
-cv.ind &lt;- sample(rep(1:10, length.out = nrow(d)))
-
-# Create models of increasing complexity, compute cross-validation error
-max.vars &lt;- 0:8
-mse &lt;- rep(NA, length(max.vars))
-for (i in 1:length(max.vars)) {
-  pred &lt;- rep(NA, nrow(d))
-  for (k in 1:10) {
-    train &lt;- cv.ind != k
-    test &lt;- !train
-    m.null &lt;- lm(quality ~ 1, d, subset = train)
-    m.sel &lt;- step(m.null, fml.full, steps = max.vars[i], k = 0)
-    pred[test] &lt;- predict(m.sel, d)[test]
-  }
-  mse[i] &lt;- mean((pred - d$quality)^2)
-}
-
-# Examine error vs. number of variables in model
-plot(max.vars, mse, type = &quot;b&quot;, xlab = &quot;Number of variables in model&quot;,
-  ylab = &quot;Cross-Validation Error&quot;, xaxp = c(0, 8, 8))
-points(max.vars[which.min(mse)], min(mse), pch = 16, col = &quot;red&quot;)</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># Define formula with all eligible variables for the regression</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>fml.full &lt;-<span class="st"> </span><span class="kw">formula</span>(quality <span class="op">~</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="st">  </span>avg_chars_per_word <span class="op">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="st">  </span>avg_words_per_sentence <span class="op">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="st">    </span>num_words <span class="op">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="st">  </span>pct_dialog_words_with_exclamation <span class="op">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="st">  </span>pct_words_dialog <span class="op">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="st">  </span>pct_words_holmes <span class="op">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="st">  </span>pct_words_type_name <span class="op">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="st">  </span>pct_words_type_noun <span class="op">+</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="st">  </span>pct_words_type_other <span class="op">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="st">  </span>pct_words_type_stopword <span class="op">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="st">  </span>pct_words_type_verb <span class="op">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="st">  </span>pct_words_watson)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="co"># Create cross-validation folds</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>cv.ind &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">length.out =</span> <span class="kw">nrow</span>(d)))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a><span class="co"># Create models of increasing complexity, compute cross-validation error</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>max.vars &lt;-<span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">8</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>mse &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="kw">length</span>(max.vars))</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(max.vars)) {</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>  pred &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="kw">nrow</span>(d))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>    train &lt;-<span class="st"> </span>cv.ind <span class="op">!=</span><span class="st"> </span>k</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>    test &lt;-<span class="st"> </span><span class="op">!</span>train</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>    m.null &lt;-<span class="st"> </span><span class="kw">lm</span>(quality <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, d, <span class="dt">subset =</span> train)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>    m.sel &lt;-<span class="st"> </span><span class="kw">step</span>(m.null, fml.full, <span class="dt">steps =</span> max.vars[i], <span class="dt">k =</span> <span class="dv">0</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>    pred[test] &lt;-<span class="st"> </span><span class="kw">predict</span>(m.sel, d)[test]</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>  }</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>  mse[i] &lt;-<span class="st"> </span><span class="kw">mean</span>((pred <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>quality)<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>}</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a><span class="co"># Examine error vs. number of variables in model</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a><span class="kw">plot</span>(max.vars, mse, <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Number of variables in model&quot;</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a>  <span class="dt">ylab =</span> <span class="st">&quot;Cross-Validation Error&quot;</span>, <span class="dt">xaxp =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dv">8</span>))</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a><span class="kw">points</span>(max.vars[<span class="kw">which.min</span>(mse)], <span class="kw">min</span>(mse), <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <figure>
-<img src="variable_selection.png" alt="Cross-validated error" /><figcaption aria-hidden="true">Cross-validated error</figcaption>
+<img src="variable_selection.png" alt="" /><figcaption>Cross-validated error</figcaption>
 </figure>
 <p>Great, it looks like a model with three variables gives us the best performance. Let’s refit a three-variable model on all the data and take a look at the results.</p>
-<pre class="r"><code># Fit model
-m.null &lt;- lm(quality ~ 1, d)
-m.sel &lt;- step(m.null, fml.full, steps = 3, k = 0)
-
-# Examine results
-summary(m.sel)</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co"># Fit model</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>m.null &lt;-<span class="st"> </span><span class="kw">lm</span>(quality <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, d)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>m.sel &lt;-<span class="st"> </span><span class="kw">step</span>(m.null, fml.full, <span class="dt">steps =</span> <span class="dv">3</span>, <span class="dt">k =</span> <span class="dv">0</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="co"># Examine results</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">summary</span>(m.sel)</span></code></pre></div>
 <pre class="text"><code>Coefficients:
                          Estimate Std. Error t value Pr(&gt;|t|)
 (Intercept)             1.412e-01  1.486e+00   0.095 0.924651

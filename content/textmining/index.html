@@ -25,35 +25,35 @@
 <p>To install, either run <code>pip install textmining</code> or download and extract the .zip file and run <code>python setup.py install</code>.</p>
 <h2 id="examples">Examples</h2>
 <p>The most common use of the textmining package is to create a term-document matrix for analysis with a statistical package such as R or MATLAB. Here is a simple example:</p>
-<pre class="python"><code>import textmining
-
-def termdocumentmatrix_example():
-    # Create some very short sample documents
-    doc1 = &#39;John and Bob are brothers.&#39;
-    doc2 = &#39;John went to the store. The store was closed.&#39;
-    doc3 = &#39;Bob went to the store too.&#39;
-    # Initialize class to create term-document matrix
-    tdm = textmining.TermDocumentMatrix()
-    # Add the documents
-    tdm.add_doc(doc1)
-    tdm.add_doc(doc2)
-    tdm.add_doc(doc3)
-    # Write out the matrix to a csv file. Note that setting cutoff=1 means
-    # that words which appear in 1 or more documents will be included in
-    # the output (i.e. every word will appear in the output). The default
-    # for cutoff is 2, since we usually aren&#39;t interested in words which
-    # appear in a single document. For this example we want to see all
-    # words however, hence cutoff=1.
-    tdm.write_csv(&#39;matrix.csv&#39;, cutoff=1)
-    # Instead of writing out the matrix you can also access its rows directly.
-    # Let&#39;s print them to the screen.
-    for row in tdm.rows(cutoff=1):
-        print row</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">import</span> textmining</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">def</span> termdocumentmatrix_example():</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="co"># Create some very short sample documents</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    doc1 <span class="op">=</span> <span class="st">&#39;John and Bob are brothers.&#39;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    doc2 <span class="op">=</span> <span class="st">&#39;John went to the store. The store was closed.&#39;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    doc3 <span class="op">=</span> <span class="st">&#39;Bob went to the store too.&#39;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="co"># Initialize class to create term-document matrix</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    tdm <span class="op">=</span> textmining.TermDocumentMatrix()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="co"># Add the documents</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    tdm.add_doc(doc1)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>    tdm.add_doc(doc2)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    tdm.add_doc(doc3)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    <span class="co"># Write out the matrix to a csv file. Note that setting cutoff=1 means</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>    <span class="co"># that words which appear in 1 or more documents will be included in</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>    <span class="co"># the output (i.e. every word will appear in the output). The default</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>    <span class="co"># for cutoff is 2, since we usually aren&#39;t interested in words which</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>    <span class="co"># appear in a single document. For this example we want to see all</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>    <span class="co"># words however, hence cutoff=1.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>    tdm.write_csv(<span class="st">&#39;matrix.csv&#39;</span>, cutoff<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>    <span class="co"># Instead of writing out the matrix you can also access its rows directly.</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>    <span class="co"># Let&#39;s print them to the screen.</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>    <span class="cf">for</span> row <span class="kw">in</span> tdm.rows(cutoff<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>        <span class="bu">print</span> row</span></code></pre></div>
 <p>In addition to writing the term-document matrix to a CSV file, this code also prints the rows of the matrix to the screen:</p>
-<pre class="python"><code>[&#39;and&#39;, &#39;the&#39;, &#39;brothers&#39;, &#39;to&#39;, &#39;are&#39;, &#39;closed&#39;, &#39;bob&#39;, &#39;john&#39;, &#39;was&#39;, &#39;went&#39;, &#39;store&#39;, &#39;too&#39;]
-[1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0]
-[0, 2, 0, 1, 0, 1, 0, 1, 1, 1, 2, 0]
-[0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1]</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>[<span class="st">&#39;and&#39;</span>, <span class="st">&#39;the&#39;</span>, <span class="st">&#39;brothers&#39;</span>, <span class="st">&#39;to&#39;</span>, <span class="st">&#39;are&#39;</span>, <span class="st">&#39;closed&#39;</span>, <span class="st">&#39;bob&#39;</span>, <span class="st">&#39;john&#39;</span>, <span class="st">&#39;was&#39;</span>, <span class="st">&#39;went&#39;</span>, <span class="st">&#39;store&#39;</span>, <span class="st">&#39;too&#39;</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]</span></code></pre></div>
 <p>Please see the ‘examples’ directory in the package file for other sample applications.</p>
 </body>
 </html>
