@@ -81,7 +81,7 @@ document.getElementById("filter-architecture").addEventListener("change", update
 document.getElementById("filter-region").addEventListener("change", updateChart);
 document.getElementById("filter-currentgen").addEventListener("change", updateChart);
 
-$.getJSON("stats.json", function(json) {
+$.getJSON("https://cpeccei-public.s3.us-west-1.amazonaws.com/spot_pricing_stats.json", function(json) {
   data = json;
   let fr = document.getElementById("filter-region");
   let regionSet = new Set();
