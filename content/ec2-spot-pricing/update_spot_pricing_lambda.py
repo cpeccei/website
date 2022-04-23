@@ -1,13 +1,9 @@
-import boto3
-import time
 import json
+import time
+import boto3
+import concurrent.futures
 
-client = boto3.client('ec2', region_name='us-west-1')
-regions = [x["RegionName"] for x in client.describe_regions()["Regions"]]
-
-stats = []
-
-for region in regions:
+def get_prices_by_region(region):
     client = boto3.client('ec2', region_name=region)
 
     # Can also be achieved by calling client.describe_instance_types() and
@@ -25,6 +21,7 @@ for region in regions:
         for spot_price in page['SpotPriceHistory']]
 
     last_update_epoch_time_ms = round(now * 1000)
+    stats = []
     for row in spot_prices:
         data = instance_types[row['InstanceType']]
         s = {
@@ -49,9 +46,20 @@ for region in regions:
              if isinstance(v, float):
                 s[k] = round(v, 4)
         stats.append(s)
-    print('Finished', region)
+    return stats
 
-stats.sort(key=lambda x: (x['dollars_per_hour'], -x['power']))
-json_data = json.dumps(stats)
-with open('stats.json', 'w') as f:
-    f.write(json_data)
+def lambda_handler(event, context):
+    client = boto3.client('ec2', region_name='us-west-1')
+    regions = [x["RegionName"] for x in client.describe_regions()["Regions"]]
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
+        data = list(executor.map(get_prices_by_region, regions))
+    data_list = []
+    for d in data:
+        data_list.extend(d)
+    data_list.sort(key=lambda x: (x['dollars_per_hour'], -x['power']))
+    json_data = json.dumps(data_list).encode(encoding='utf-8')
+
+    s3_client = boto3.client('s3')
+    s3_client.put_object(Body=json_data, Bucket='cpeccei-public',
+        Key='spot_pricing_stats.json')
